@@ -122,6 +122,7 @@ public class DataBase {
 	            System.out.println(e.getMessage());  
 	        }  
 	    }
+	  
 	  //Todas as musicas de uma playlist de um id
 	  static public void musicas_da_playlist(Connection conn, int id_playlist) {
 		  String sql = "SELECT musicas.id, musicas.titulo, musicas.path\r\n"
@@ -144,6 +145,7 @@ public class DataBase {
 		  
 	  }
 	  
+	  //Todas as playlists de um usuário com o id fornecido
 	  public static void playlists_do_usuario(Connection conn, int proprietario_id) {
 		  String sql = "SELECT playlists.id, playlists.nome\r\n"
 			  		+ "FROM playlists\r\n"
@@ -178,7 +180,34 @@ public class DataBase {
 	        } catch (SQLException e) {  
 	            System.out.println(e.getMessage());  
 	        }  
-	    }  
+	    }
+	  
+	  //Busca de usuario a partir de um username
+	  public static void busca_usuario(Connection conn, String nome_usuario) {
+		  String sql = "SELECT usuarios.id, usuarios.nome, usuarios.password\r\n"
+			  		+ "FROM usuarios\r\n"
+			  		+ "WHERE usuarios.username = ?;";
+		  
+		  try {          
+			  	PreparedStatement stmt = conn.prepareStatement(sql);  
+			  	stmt.setString(1, nome_usuario);
+			  	ResultSet rs = stmt.executeQuery();
+			  	
+			  	if(!rs.next()) {
+			  		System.out.println("Not found");
+			  		return;
+			  	}
+			  	
+			  	do{  
+	                System.out.println(rs.getInt("id") +  "\t" +   
+	                                   rs.getString("nome") + "\t" +
+	                                   rs.getString("password")+ "\t");  
+	            } while (rs.next()) ;
+	           
+	        } catch (SQLException e) {  
+	            System.out.println(e.getMessage());  
+	        }  
+	  }
 	  
 	  
 	  //Main esta aqui pra testar a database por enquanto 
@@ -192,6 +221,8 @@ public class DataBase {
 				select_all_user(conn,"usuarios");
 				System.out.println("============");
 				playlists_do_usuario(conn,1);
+				System.out.println("============");
+				busca_usuario(conn,"joninas2003");
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
