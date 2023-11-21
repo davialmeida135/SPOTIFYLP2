@@ -1,4 +1,4 @@
-package com.spotify.modelo;
+package com.spotify.model;
 import java.util.ArrayList;
 
 //Pasta com o nome do usuario e as playlists dele

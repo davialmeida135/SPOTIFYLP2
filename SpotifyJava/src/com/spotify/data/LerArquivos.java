@@ -1,15 +1,10 @@
-package com.spotify.arquivo;
+package com.spotify.data;
 import java.io.*;
 import java.nio.file.*;
 import java.util.stream.Stream;
-import java.util.HashMap;
-import java.sql.Connection;  
-import java.sql.DriverManager;  
-import java.sql.SQLException;  
-import java.sql.DatabaseMetaData;
-import java.sql.Statement; 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet; 
+
+//POSSIVELMENTE NÃO SERÁ USADO, DEVIDO A IMPLEMENTACAO DO SQLITE
+
 //Ler arquivos 
 //diretorios.txt: decidir o que ele deve conter
 //musicas.txt: Dicionario nome :: path usado pra verificar

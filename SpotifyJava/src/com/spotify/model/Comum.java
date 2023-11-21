@@ -1,4 +1,4 @@
-package com.spotify.modelo;
+package com.spotify.model;
 
 //Playlist "default" com as musicas
 

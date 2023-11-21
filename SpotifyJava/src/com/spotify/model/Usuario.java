@@ -1,4 +1,4 @@
-package com.spotify.modelo;
+package com.spotify.model;
 
 public class Usuario {
 

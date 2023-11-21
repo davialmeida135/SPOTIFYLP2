@@ -1,4 +1,4 @@
-package com.spotify.arquivo;
+package com.spotify.data;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -133,11 +133,15 @@ public class DataBase {
 		  try {          
 	            Statement stmt  = conn.createStatement();
 	            ResultSet rs = stmt.executeQuery(sql);
-	            while (rs.next()) { 
+	            if(!rs.next()) {
+			  		System.out.println("A playlist "+id_playlist+" não possui músicas registradas.");
+			  		return;
+			  	}
+	            do{ 
 	            	 System.out.println(rs.getString("id") +  "\t"+
 	            			 rs.getString("titulo") +  "\t" +                     
                              rs.getString("path")+ "\t");
-	            }
+	            }while (rs.next());
 	            
 		  } catch (SQLException e) {  
 	            System.out.println(e.getMessage());  
@@ -154,10 +158,15 @@ public class DataBase {
 			  try {          
 		            Statement stmt  = conn.createStatement();
 		            ResultSet rs = stmt.executeQuery(sql);
-		            while (rs.next()) { 
-		            	 System.out.println(rs.getString("id") +  "\t"+
-		            			 rs.getString("nome") +  "\t");
-		            }
+		            
+	            if(!rs.next()) {
+			  		System.out.println("O usuário "+proprietario_id+" não possui playlists registradas.");
+			  		return;
+			  	}
+	            do { 
+	            	System.out.println(rs.getString("id") +  "\t"+
+	            			 rs.getString("nome") +  "\t");
+	            } while (rs.next());
 		            
 			  } catch (SQLException e) {  
 		            System.out.println(e.getMessage());  
@@ -194,7 +203,7 @@ public class DataBase {
 			  	ResultSet rs = stmt.executeQuery();
 			  	
 			  	if(!rs.next()) {
-			  		System.out.println("Not found");
+			  		System.out.println("Nenhum usuário com este nome foi encontrado.");
 			  		return;
 			  	}
 			  	
