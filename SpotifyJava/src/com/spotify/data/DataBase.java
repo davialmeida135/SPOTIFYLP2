@@ -218,39 +218,7 @@ public class DataBase {
 	        }  
 	  }
 	  
-	  
-	  //Main esta aqui pra testar a database por enquanto 
-	  public static void main(String[] args) {
-		  //createNewDatabase("database.db");
-		  Connection conn = connect("database.db");
-		  if(conn!=null) {	  
-			try {
-				musicas_da_playlist(conn,1);
-				System.out.println("============");
-				select_all_user(conn,"usuarios");
-				System.out.println("============");
-				playlists_do_usuario(conn,1);
-				System.out.println("============");
-				busca_usuario(conn,"joninas2003");
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		  }
-		  
-			/*
-			//connect();
-			//createNewTable();
-			 * insert_user(conn,"Jonas","VIP","joninhas2003","23102003");
-				insert_user(conn,"Davi","Comum","davizaoaoao","10102003");
-				insert_user(conn,"Joao","VIP","calangofange","808080");
-				insert_playlist(conn,"Rock", "Eu sou do rock","Davi");
-				insert_playlist(conn,"Pagode", "Alegriaaaa","Joao");
-				insert_playlist(conn,"Samba", "Carnaval","Jonas");
-				//
-			 * 
-			 * */
-			
-		}
 }
+	  
+	  
+

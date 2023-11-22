@@ -1,5 +1,5 @@
 package com.spotify.view;
 
-public class MainView {
+public class MenuView {
 
 }
