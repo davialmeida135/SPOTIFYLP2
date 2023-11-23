@@ -59,7 +59,7 @@
         </Label>
             <BorderPane prefHeight="357.0" prefWidth="405.0">
                <left>
-                  <ListView prefHeight="319.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <ListView fx:id="ListaPlaylists" prefHeight="319.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                </left>
                <center>
                   <ListView prefHeight="319.0" prefWidth="202.0" BorderPane.alignment="CENTER" />
@@ -73,7 +73,7 @@
                </top>
             </BorderPane>
             <ProgressBar layoutX="252.0" layoutY="414.0" prefHeight="18.0" prefWidth="236.0" progress="0.0" />
-            <ImageView fitHeight="27.0" fitWidth="32.0" layoutX="334.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playButton" fitHeight="27.0" fitWidth="32.0" layoutX="334.0" layoutY="380.0" onMouseClicked="#playClicked" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/playbutton.png" />
                </image>
