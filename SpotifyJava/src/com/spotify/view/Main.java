@@ -1,7 +1,9 @@
 package com.spotify.view;
 import java.sql.Connection;
-import java.sql.SQLException;
 
+import java.sql.SQLException;
+import com.spotify.control.*;
+import com.spotify.view.*;
 import com.spotify.data.DataBase;
 
 //No momento apenas testes da database
@@ -9,7 +11,11 @@ import com.spotify.data.DataBase;
 
 public class Main {
 	public static void main(String[] args) {
-		  //createNewDatabase("database.db");
+		  System.out.print("oi");
+		  LoginView.play_login(args);
+		  }
+		  
+			/*//createNewDatabase("database.db");
 		  Connection conn = DataBase.connect("database.db");
 		  if(conn!=null) {	  
 			try {
@@ -25,9 +31,6 @@ public class Main {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		  }
-		  
-			/*
 			//connect();
 			//createNewTable();
 			 * insert_user(conn,"Jonas","VIP","joninhas2003","23102003");
@@ -38,7 +41,7 @@ public class Main {
 				insert_playlist(conn,"Samba", "Carnaval","Jonas");
 				//
 			 * 
-			 * */
+			 * 
 			
-	}
+	}*/
 }
