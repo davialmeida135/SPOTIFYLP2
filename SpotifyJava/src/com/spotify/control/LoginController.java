@@ -48,7 +48,7 @@ public class LoginController {
 				System.out.println("eba");
 				//new SceneSwitch(LoginAnchorPane,"../view/templates/MainMenu.fxml");
 				MenuView teste = new MenuView();
-				teste.SceneSwitch(stage);
+				teste.start(stage,1);
 			}
 			else {
 				myLabel.setText("You must be 18+");
