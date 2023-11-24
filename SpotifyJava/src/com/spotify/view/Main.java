@@ -1,15 +1,30 @@
 package com.spotify.view;
 import java.sql.Connection;
-import java.sql.SQLException;
 
+
+import java.sql.SQLException;
+import com.spotify.control.*;
+import com.spotify.view.*;
+import com.spotify.dao.*;
 import com.spotify.data.DataBase;
 
 //No momento apenas testes da database
 //Em breve testes da interface
 
 public class Main {
-	public static void main(String[] args) {
-		  //createNewDatabase("database.db");
+	public static void main(String[] args) throws SQLException {
+		  System.out.print("oi");
+		  Connection conn = DataBase.connect("database.db");
+		  UsuarioDAO.autenticar("davizaoaoao", "10102003",conn);
+		  UsuarioDAO.removerUsuario("calangofange",conn);
+		  //UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
+		  conn.close();
+		  //LoginView.play_login(args);
+		  
+	}
+		  
+			/*//createNewDatabase("database.db");
+		  Connection conn = DataBase.connect("database.db");
 		  Connection conn = DataBase.connect("database.db");
 		  if(conn!=null) {	  
 			try {
@@ -26,8 +41,6 @@ public class Main {
 				e.printStackTrace();
 			}
 		  }
-		  
-			/*
 			//connect();
 			//createNewTable();
 			 * insert_user(conn,"Jonas","VIP","joninhas2003","23102003");
@@ -38,7 +51,7 @@ public class Main {
 				insert_playlist(conn,"Samba", "Carnaval","Jonas");
 				//
 			 * 
-			 * */
+			 * 
 			
-	}
+	}*/
 }
