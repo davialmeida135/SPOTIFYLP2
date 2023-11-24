@@ -64,19 +64,19 @@ public class DataBase {
 	    }  
 	   
 	   
-	  static public void insert_user(Connection conn,String nome, String tipo, String username, String password) {  
+	   public static void insert_user(Connection conn,String nome, String tipo, String username, String password) {  
 	        String sql = "INSERT INTO usuarios(nome, tipo,username,password) VALUES(?,?,?,?)";  
 	   
-	        try{  
-	   
+	        try{
 	            PreparedStatement pstmt = conn.prepareStatement(sql);  
 	            pstmt.setString(1, nome);  
 	            pstmt.setString(2, tipo);
 	            pstmt.setString(3, username);
 	            pstmt.setString(4, password);
-	            pstmt.executeUpdate();  
-	        } catch (SQLException e) {  
-	            System.out.println(e.getMessage());  
+	            pstmt.executeUpdate();
+	            System.out.println("Usuário criado com sucesso!");
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage()); 
 	        }  
 	  }
 	  
