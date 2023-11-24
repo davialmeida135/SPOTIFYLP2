@@ -26,6 +26,9 @@ public class MenuController {
     @FXML
     private ListView<String> listaMusicas;
 	
+    UserHolder holder;
+    Usuario loggedUser;
+    
 	@FXML
     void playClicked(ActionEvent event) {
 		System.out.println("APERTA O PLAY");
@@ -34,7 +37,9 @@ public class MenuController {
 	
 	@FXML
 	public void submit(ActionEvent event) throws Exception {
-		ListaPlaylists.getItems().add("oi");
+		UserHolder holder = UserHolder.getInstance();
+		Usuario loggedUser = holder.getUser();
+		ListaPlaylists.getItems().add(loggedUser.getNome());
 		
 	}
 	
