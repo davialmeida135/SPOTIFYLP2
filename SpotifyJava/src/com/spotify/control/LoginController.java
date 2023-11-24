@@ -2,27 +2,29 @@ package com.spotify.control;
 
 import java.io.IOException;
 
+
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.spotify.view.*;
+import com.spotify.model.Usuario;
+
 
 public class LoginController {
 	
 	private Stage stage;
 	private Scene scene;
-	private Parent root;
+	private Usuario user;
 
 	@FXML
 	private AnchorPane LoginAnchorPane;
@@ -40,15 +42,22 @@ public class LoginController {
 	
 	public void submit(ActionEvent event) throws Exception { //Ao ser apertado o botão login
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		user = new Usuario();
 		try {
 			age = Integer.parseInt(passwordTextField.getText());
 			
 			if(age >= 18) {
 				myLabel.setText("You are now signed up!");
-				System.out.println("eba");
-				//new SceneSwitch(LoginAnchorPane,"../view/templates/MainMenu.fxml");
+				System.out.println("fase1");
+				
+				user.setId(2);
+				user.setNome("Gustavo");
+				System.out.println("fase2");
+				UserHolder holder = UserHolder.getInstance();
+				holder.setUser(user);
+				System.out.println("fase3");
 				MenuView teste = new MenuView();
-				teste.start(stage,1);
+				teste.start(stage);
 			}
 			else {
 				myLabel.setText("You must be 18+");
@@ -69,5 +78,13 @@ public class LoginController {
 		System.out.println("oii");
 		
 		
+	}
+
+	public Usuario getUser() {
+		return user;
+	}
+
+	public void setUser(Usuario user) {
+		this.user = user;
 	}
 }
