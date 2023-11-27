@@ -1,5 +1,11 @@
 package com.spotify.control;
-//Gerenciar a fila
+
+import java.util.Queue;
+
+//Gerenciar a fila e tocar as musicas
+//Fazer funcao de adicionar musica a fila
+//Fazer funcao de adicionar playlist a fila
 public class MusicPlayer {
+	private Queue<String> fila;
 
 }
