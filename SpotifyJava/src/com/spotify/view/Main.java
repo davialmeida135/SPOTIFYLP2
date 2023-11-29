@@ -3,10 +3,13 @@ import java.sql.Connection;
 
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.spotify.control.*;
 import com.spotify.view.*;
 import com.spotify.dao.*;
 import com.spotify.data.DataBase;
+import com.spotify.model.Musica;
 
 //No momento apenas testes da database
 //Em breve testes da interface
@@ -15,8 +18,10 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
 		  Connection conn = DataBase.connect("database.db");
-		  UsuarioDAO.autenticar("davizaoaoao", "10102003",conn);
-		  UsuarioDAO.removerUsuario("calangofange",conn);
+		  ArrayList<Musica> musicas= PlaylistDAO.getMusicasPlaylist(1, conn);
+		  System.out.println(musicas.get(0).getNome());
+		  System.out.println(musicas.get(1).getNome());
+		  System.out.println(musicas);
 		  //UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
 		  conn.close();
 		  //LoginView.play_login(args);

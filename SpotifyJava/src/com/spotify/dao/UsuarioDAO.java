@@ -20,6 +20,9 @@ public class UsuarioDAO {
             pstmt.setString(3, usuario);
             pstmt.setString(4, senha);
             pstmt.executeUpdate();
+   
+            int userId = getUserId(usuario,conn);
+            PlaylistDAO.novaPlaylist("Musicas", "Todas as músicas adicionadas", userId, conn);
             System.out.println("Usuário criado com sucesso!");
         } catch (SQLException e) {
             System.out.println(e.getMessage()); 

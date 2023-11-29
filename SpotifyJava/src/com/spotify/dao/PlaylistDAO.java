@@ -117,10 +117,36 @@ public class PlaylistDAO {
             return -1;
         }
     }
-	//teste
+	
+    
 	//Retorna um array com todas as musicas de uma playlist
-	public static ArrayList<Musica> getMusicasPlaylist(int playlistId){
+	public static ArrayList<Musica> getMusicasPlaylist(int playlistId,Connection conn) throws SQLException{
 		ArrayList<Musica> musicas = new ArrayList<Musica>();
+		//Musica novaMusica = new Musica();
+		String sql = "SELECT m.titulo, m.path "
+                + "FROM playlists p "
+                + "JOIN musicas_e_playlists mep ON p.id = mep.id_playlist "
+                + "JOIN musicas m ON mep.id_musica = m.id "
+                + "WHERE p.id = '" + playlistId + "'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+
+		int i = 0;
+        while (rs.next()) {
+        	Musica novaMusica = new Musica();
+            String title = rs.getString("titulo");
+            String path = rs.getString("path");
+            novaMusica.setNome(title);
+        	novaMusica.setPath(path);
+        	
+        	musicas.add(novaMusica);
+        	//System.out.println(novaMusica.getNome()+novaMusica.getPath());
+        	
+
+            System.out.println("Title: " + title);
+            System.out.println("Path: " + path);
+            System.out.println("------------------------");
+        }
 		return musicas;
 	}
 	

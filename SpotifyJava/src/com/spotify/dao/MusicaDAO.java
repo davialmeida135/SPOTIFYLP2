@@ -1,5 +1,7 @@
 package com.spotify.dao;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +13,8 @@ import com.spotify.data.DataBase;
 //Para adicionar, remover, modificar e tocar músicas
 public class MusicaDAO {
 	
-
-	public static void novaMusica(String nome, String path, Connection conn) {
+	//Adiciona uma musica à database
+	public static void novaMusica(String nome, String path,int userId ,Connection conn) {
 	    String sql = "INSERT INTO musicas (nome, path) VALUES (?, ?)";
 
 	    try {
@@ -27,8 +29,33 @@ public class MusicaDAO {
 	    }
 	}
 	
-	public static void novoDiretorio(String path, Connection conn) {
-
+	//Adiciona todas as musicas de uma pasta à database
+	public static void novoDiretorio(String path,int userId, Connection conn) 
+		{ 
+	        File file = new File(path); 
+	  
+	        File[] files = file.listFiles(); 
+	        if (files == null) 
+	            return; 
+	  
+	        for (File f : files) { 
+	  
+	            if (f.isDirectory() && f.exists()) { 
+	                try { 
+	                	novoDiretorio(f.getPath(),userId,conn); 
+	                } 
+	                catch (Exception e) { 
+	                    e.printStackTrace(); 
+	                    continue; 
+	                } 
+	            } 
+	            else if (!f.isDirectory() && f.exists()) { 
+	                // using file filter 
+	                if (filter.accept(f)) {
+	                	novaMusica(f.getName(), f.getPath(), -1,conn) ;
+	                } 
+	            } 
+	        } 
 	}
 	
 	public static void removerMusica(String nome, Connection conn) {
@@ -73,8 +100,37 @@ public class MusicaDAO {
 		String sql = "SELECT musicas.path FROM musicas "
 				+ "WHERE musicas.nome = ?";
 		
-		
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, nome);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+	            return rs.getString("path");
+	        } else {
+	            System.out.println("Música não encontrada.");
+	            return "";
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
 		return path;
 	}
-
+	
+	//Filtro de mp3 e wav
+	 static FileFilter filter = new FileFilter() { 
+	        @Override 
+	          public boolean accept(File file) 
+	        { 
+	            if (file.getName().endsWith(".mp3") 
+	                || file.getName().endsWith(".wav")) { 
+	                return true; 
+	            } 
+	            return false; 
+	        } 
+	    }; 
 }

@@ -3,18 +3,10 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.stream.Stream;
 
-//POSSIVELMENTE NÃO SERÁ USADO, DEVIDO A IMPLEMENTACAO DO SQLITE
 
-//Ler arquivos 
-//diretorios.txt: decidir o que ele deve conter
-//musicas.txt: Dicionario nome :: path usado pra verificar
-//se uma musica existe
-//playlist_<nome> : Nao sei ainda
-//talvez uma array de path pras musicas
-//usuarios: dicionario  com user::senha
 public class LerArquivos {
 	
-	 public void lerPasta() {
+	 public static void lerPasta() {
 			try {
 				Stream<Path> filepath= Files.walk(Paths.get("storage"));
 				filepath.forEach(System.out::println);
@@ -25,9 +17,50 @@ public class LerArquivos {
 			}
 
 			{
-	       // Printing the name of directories and files
-	       // with entire path
+	     
 	       
 			}
 		}
+	 
+	 //Escaneia todos os arquivos de uma pasta
+	 public static void scanAllFile(String path) 
+	    { 
+	        File file = new File(path); 
+	  
+	        File[] files = file.listFiles(); 
+	        if (files == null) 
+	            return; 
+	  
+	        for (File f : files) { 
+	  
+	            if (f.isDirectory() && f.exists()) { 
+	                try { 
+	                    scanAllFile(f.getPath()); 
+	                } 
+	                catch (Exception e) { 
+	                    e.printStackTrace(); 
+	                    continue; 
+	                } 
+	            } 
+	            else if (!f.isDirectory() && f.exists()) { 
+	                // using file filter 
+	                if (filter.accept(f)) {
+	                    System.out.println(f.getName());
+	                } 
+	            } 
+	        } 
+	    } 
+	 
+	 //Filtro de apenas arquivos mp3 e wav
+	 static FileFilter filter = new FileFilter() { 
+	        @Override 
+	          public boolean accept(File file) 
+	        { 
+	            if (file.getName().endsWith(".mp3") 
+	                || file.getName().endsWith(".wav")) { 
+	                return true; 
+	            } 
+	            return false; 
+	        } 
+	    }; 
 }
