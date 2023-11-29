@@ -11,6 +11,7 @@ import com.spotify.data.DataBase;
 //Para adicionar, remover, modificar e tocar músicas
 public class MusicaDAO {
 	
+
 	public static void novaMusica(String nome, String path, Connection conn) {
 	    String sql = "INSERT INTO musicas (nome, path) VALUES (?, ?)";
 
@@ -64,10 +65,14 @@ public class MusicaDAO {
 	        System.out.println(e.getMessage());
 	        return -1;
 	    }
+
 	}
 	
 	public static String getMusicaPath(String nome, int userId,Connection conn) {
 		String path = null;
+		String sql = "SELECT musicas.path FROM musicas "
+				+ "WHERE musicas.nome = ?";
+		
 		
 		return path;
 	}
