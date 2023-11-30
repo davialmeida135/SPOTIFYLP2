@@ -20,3 +20,18 @@ Database SQLITE:
 		
 		busca_usuario(Connection conn, String username): Busca se há um usuário com o
 		referido username dentro da database.
+		
+WHATS NEXT:
+
+- Função que recebe id do usuário e retorna objeto Usuario com todas suas informações
+- Implementar essa função no LoginController
+
+- Criar playlist chamada "todas as músicas", onde toda música que for lida em um diretório será adicionada
+
+- Carregar todas playlists e dados do usuário após login 
+
+- Conseguir tocar músicas
+
+- Remover músicas vai dar trabalho
+
+- Criar tela de cadastro

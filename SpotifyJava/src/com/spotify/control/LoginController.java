@@ -1,7 +1,7 @@
 package com.spotify.control;
 
 import java.io.IOException;
-
+import java.sql.Connection;
 
 import javafx.event.ActionEvent;
 
@@ -17,7 +17,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.spotify.view.*;
+import com.spotify.data.*;
 import com.spotify.model.Usuario;
+import com.spotify.dao.UsuarioDAO;
 
 
 public class LoginController {
@@ -30,27 +32,48 @@ public class LoginController {
 	private AnchorPane LoginAnchorPane;
 	
 	@FXML
-	private Label myLabel;
-	@FXML
-	private TextField passwordTextField;
-	@FXML
-	private Button myButton;
-	@FXML
-	private TextField usernameTextField;
+    private TextField passwordTextField;
+
+    @FXML
+    private Label registerLabel;
+
+    @FXML
+    private Label myLabel;
+
+    @FXML
+    private Button logIn;
+
+    @FXML
+    private Label errorLabel;
+
+    @FXML
+    private TextField usernameTextField;
 	
-	int age;
+	String usuario;
+	String senha;
 	
-	public void submit(ActionEvent event) throws Exception { //Ao ser apertado o botão login
+	int autenticador;
+	
+	public void submitLogin(ActionEvent event) throws Exception { //Ao ser apertado o botão login
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		user = new Usuario();
 		try {
-			age = Integer.parseInt(passwordTextField.getText());
+			usuario = usernameTextField.getText();
+			senha = passwordTextField.getText();
 			
-			if(age >= 18) {
+			
+			Connection conn = DataBase.connect("database.db");
+			autenticador = UsuarioDAO.autenticar(usuario, senha, conn);
+			conn.close();
+			
+			
+			//-1 = usuario nao encontrado
+			//-2 = senha incorreta
+			if(autenticador >= 0) {
 				myLabel.setText("You are now signed up!");
 				System.out.println("fase1");
-				
-				user.setId(2);
+				//Funcao de receber uma instancia de usuario baseado no id
+				user.setId(autenticador);
 				user.setNome("Gustavo");
 				System.out.println("fase2");
 				UserHolder holder = UserHolder.getInstance();
@@ -59,9 +82,14 @@ public class LoginController {
 				MenuView teste = new MenuView();
 				teste.start(stage);
 			}
+			else if(autenticador ==-1){
+				errorLabel.setText("Usuário não encontrado");	
+			}
+			else if(autenticador == -2) {
+				errorLabel.setText("Senha incorreta");	
+			}
 			else {
-				myLabel.setText("You must be 18+");
-				
+				errorLabel.setText("Erro não identificado");	
 			}
 		}
 		catch (NumberFormatException e){

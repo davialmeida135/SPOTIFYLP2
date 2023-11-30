@@ -86,8 +86,6 @@ public class UsuarioDAO {
 	
 	}
 	
-	
-	
 	public static int autenticar(String usuario, String senha,Connection conn) {
 		String sql = "SELECT usuarios.id, usuarios.username, usuarios.password\r\n"
 		  		+ "FROM usuarios\r\n"
@@ -102,21 +100,21 @@ public class UsuarioDAO {
 	            
             if(!rs.next()) {
 		  		System.out.println("Usuário não encontrado.");
-		  		return 404;
+		  		return -1;
 		  	}
             if(rs.getString("password").equals(senha)) {
             	System.out.println("Login bem sucedido!");
-            	return 0;
+            	return rs.getInt("id");
             }
             else {	
             	System.out.println("Senha incorreta");
-            	return 1;
+            	return -2;
             }   
 	            
 		  } catch (SQLException e) {  
 	            System.out.println(e.getMessage());  
 	        }   
-		return -1;
+		return -3;
 	}
 
 }

@@ -15,11 +15,6 @@ public class LerArquivos {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			{
-	     
-	       
-			}
 		}
 	 
 	 //Escaneia todos os arquivos de uma pasta

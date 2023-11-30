@@ -17,18 +17,19 @@ import com.spotify.model.Musica;
 public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
-		  Connection conn = DataBase.connect("database.db");
+		  
+		  LoginView.play_login(args);
+		  
+	}
+		  
+			/*Connection conn = DataBase.connect("database.db");
 		  ArrayList<Musica> musicas= PlaylistDAO.getMusicasPlaylist(1, conn);
 		  System.out.println(musicas.get(0).getNome());
 		  System.out.println(musicas.get(1).getNome());
 		  System.out.println(musicas);
 		  //UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
 		  conn.close();
-		  //LoginView.play_login(args);
-		  
-	}
-		  
-			/*//createNewDatabase("database.db");
+		  //createNewDatabase("database.db");
 		  Connection conn = DataBase.connect("database.db");
 		  Connection conn = DataBase.connect("database.db");
 		  if(conn!=null) {	  

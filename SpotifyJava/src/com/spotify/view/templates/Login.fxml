@@ -22,7 +22,7 @@
             <Font size="17.0" />
          </font>
       </TextField>
-      <Button fx:id="myButton" layoutX="130.0" layoutY="295.0" mnemonicParsing="false" onAction="#submit" prefHeight="53.0" prefWidth="90.0" text="Log in">
+      <Button fx:id="logIn" layoutX="130.0" layoutY="295.0" mnemonicParsing="false" onAction="#submitLogin" prefHeight="53.0" prefWidth="90.0" text="Log in">
          <font>
             <Font size="18.0" />
          </font></Button>
