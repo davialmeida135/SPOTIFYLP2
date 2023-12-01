@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
@@ -58,7 +61,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="339.0" layoutX="293.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5770" height="339.0" layoutX="34.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
             <ProgressBar layoutX="229.0" layoutY="520.0" prefHeight="18.0" prefWidth="327.0" progress="0.0" />
-            <Button fx:id="testeBotao" layoutX="673.0" layoutY="406.0" mnemonicParsing="false" onAction="#submit" prefHeight="39.0" prefWidth="143.0" text="Log out">
+            <Button layoutX="673.0" layoutY="406.0" mnemonicParsing="false" onAction="#logOut" prefHeight="39.0" prefWidth="143.0" text="Log out">
       		         <font>
       		            <Font size="18.0" />
       		         </font>
@@ -94,26 +97,29 @@
                </font>
             </Text>
             <Accordion layoutX="637.0" layoutY="58.0" />
-            <Text layoutX="669.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome do usuário" textAlignment="RIGHT" wrappingWidth="150.13671875">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Text>
-            <Text layoutX="673.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="RIGHT" wrappingWidth="143.13671875">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Text>
-            <Text layoutX="673.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VIP ou Não" textAlignment="RIGHT" wrappingWidth="143.13671875">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Text>
             <ImageView fitHeight="176.0" fitWidth="174.0" layoutX="656.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/profilepic.jpg" />
                </image>
             </ImageView>
+            <Label fx:id="nameHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="191.0" prefHeight="20.0" prefWidth="127.0" text="nameHolder" textAlignment="RIGHT" textFill="#000000">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <Label fx:id="usernameHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="223.0" prefHeight="20.0" prefWidth="127.0" text="usernameHolder" textAlignment="RIGHT" textFill="#000000">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="typeHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="260.0" prefHeight="20.0" prefWidth="127.0" text="typeHolder" textAlignment="RIGHT" textFill="#000000">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>

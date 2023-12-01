@@ -12,7 +12,7 @@ import com.spotify.control.MenuController;
 public class MenuView extends Application{
 	private Parent root;
 	public Scene generateScene() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("templates/MainMenu.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("./templates/MainMenu.fxml"));
         Scene scene = new Scene(loader.load());
         return scene;
 	}
@@ -25,15 +25,7 @@ public class MenuView extends Application{
         //FUNCAO DE INICIALIZACAO NO MENU CONTROLLER
               
     }
-	public void start(Stage stage, int userId) throws Exception {
-	        
-	        start(stage);
-	        //FUNCAO DE INICIALIZACAO NO MENU CONTROLLER
-	        MenuController test = new MenuController();
-	        test.loadPlaylists(userId);
-	        System.out.println("CHEGUEI AQUIEIN");        
-	    }
-	
+
 	public static void play_menu(int user_id,String[] args) {
 		launch(args);
 	}

@@ -6,6 +6,7 @@ public class Usuario {
 	private int id;
 	private String usuario;
 	private String senha;
+	private String tipo;
 	
 	public String getUsuario() {
 		return usuario;
@@ -30,6 +31,12 @@ public class Usuario {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 }

@@ -64,7 +64,7 @@ public class LoginController {
 			
 			Connection conn = DataBase.connect("database.db");
 			autenticador = UsuarioDAO.autenticar(usuario, senha, conn);
-			conn.close();
+			
 			
 			
 			//-1 = usuario nao encontrado
@@ -73,14 +73,14 @@ public class LoginController {
 				myLabel.setText("You are now signed up!");
 				System.out.println("fase1");
 				//Funcao de receber uma instancia de usuario baseado no id
-				user.setId(autenticador);
-				user.setNome("Gustavo");
+				user = UsuarioDAO.getUsuario(autenticador, conn);
+				conn.close();
 				System.out.println("fase2");
 				UserHolder holder = UserHolder.getInstance();
 				holder.setUser(user);
 				System.out.println("fase3");
-				MenuView teste = new MenuView();
-				teste.start(stage);
+				MenuView menu = new MenuView();
+				menu.start(stage);
 			}
 			else if(autenticador ==-1){
 				errorLabel.setText("Usuário não encontrado");	
@@ -98,6 +98,7 @@ public class LoginController {
 		}
 		catch (Exception e) {
 			myLabel.setText("error");
+			System.out.println(e.toString());
 		}
 	}
 	
