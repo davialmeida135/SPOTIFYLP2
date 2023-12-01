@@ -60,25 +60,20 @@ public class LoginController {
 		try {
 			usuario = usernameTextField.getText();
 			senha = passwordTextField.getText();
-			
-			
+		
 			Connection conn = DataBase.connect("database.db");
 			autenticador = UsuarioDAO.autenticar(usuario, senha, conn);
-			
-			
-			
+
 			//-1 = usuario nao encontrado
 			//-2 = senha incorreta
 			if(autenticador >= 0) {
 				myLabel.setText("You are now signed up!");
-				System.out.println("fase1");
+				
 				//Funcao de receber uma instancia de usuario baseado no id
 				user = UsuarioDAO.getUsuario(autenticador, conn);
 				conn.close();
-				System.out.println("fase2");
 				UserHolder holder = UserHolder.getInstance();
 				holder.setUser(user);
-				System.out.println("fase3");
 				MenuView menu = new MenuView();
 				menu.start(stage);
 			}

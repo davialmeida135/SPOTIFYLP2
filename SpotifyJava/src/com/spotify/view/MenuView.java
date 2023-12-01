@@ -18,7 +18,7 @@ public class MenuView extends Application{
 	}
 	
 	public void start(Stage stage) throws Exception {
-		System.out.println("start");
+		//System.out.println("start");
         stage.setScene(generateScene());
         stage.setTitle("Menu");
         stage.show();

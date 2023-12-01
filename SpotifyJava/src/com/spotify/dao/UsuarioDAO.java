@@ -39,7 +39,7 @@ public class UsuarioDAO {
 			ResultSet rs = stmt.executeQuery();
 			if(!rs.next()) {
 				//System.out.println("Usuário não encontrado.");
-				return 404;
+				return -2;
 			}
 			else{
 				//System.out.println("Usuario encontrado!");

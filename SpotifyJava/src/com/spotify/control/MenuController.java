@@ -2,7 +2,11 @@ package com.spotify.control;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import com.spotify.data.DataBase;
 import com.spotify.model.Usuario;
 import com.spotify.view.LoginView;
 import com.spotify.view.MenuView;
@@ -36,11 +40,6 @@ public class MenuController {
     UserHolder holder=UserHolder.getInstance();
     Usuario loggedUser=holder.getUser();
     
-	@FXML
-    void playClicked(ActionEvent event) {
-		System.out.println("APERTA O PLAY");
-		//ListaPlaylists.getItems().add("oi");
-    }
 	
 	@FXML
 	public void logOut(ActionEvent event) throws Exception {
@@ -50,25 +49,43 @@ public class MenuController {
 		login.start(stage);
 	}
 	
-	public void initialize() {
+	public void initialize() throws SQLException {
 		
-		System.out.println("Inicializou");
+		//System.out.println("Inicializou");
 		
 		nameHolder.setText(loggedUser.getNome());
 		usernameHolder.setText(loggedUser.getUsuario());
 		typeHolder.setText(loggedUser.getTipo());
 		
-		
-		
+		Connection conn = DataBase.connect("database.db");
+		loadPlaylists(loggedUser.getId(),conn);
+		conn.close();
 		
 		System.out.println(loggedUser.getNome());
-		ListaPlaylists.getItems().add(Integer.toString(loggedUser.getId()));
+		
 	}
 	
 	public void loadPlaylists(int userId,Connection conn) {
 		//System.out.println("NUMERO UM");
-		ListaPlaylists.getItems().add("number one213");
-		ListaPlaylists.getItems().add(loggedUser.getNome());
+		String sql = "SELECT playlists.nome FROM playlists WHERE proprietario_id = ?";
+		ListaPlaylists.getItems().add("Musicas");
+		if(loggedUser.getTipo().equals("VIP")) {
+			System.out.println("é um vip, procurando playlists");
+			try {
+			PreparedStatement stmt = conn.prepareStatement(sql); 
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				ListaPlaylists.getItems().add(rs.getString("nome"));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+
 	}
 	
 }
