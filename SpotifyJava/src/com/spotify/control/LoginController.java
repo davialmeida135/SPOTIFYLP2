@@ -60,27 +60,22 @@ public class LoginController {
 		try {
 			usuario = usernameTextField.getText();
 			senha = passwordTextField.getText();
-			
-			
+		
 			Connection conn = DataBase.connect("database.db");
 			autenticador = UsuarioDAO.autenticar(usuario, senha, conn);
-			conn.close();
-			
-			
+
 			//-1 = usuario nao encontrado
 			//-2 = senha incorreta
 			if(autenticador >= 0) {
 				myLabel.setText("You are now signed up!");
-				System.out.println("fase1");
+				
 				//Funcao de receber uma instancia de usuario baseado no id
-				user.setId(autenticador);
-				user.setNome("Gustavo");
-				System.out.println("fase2");
+				user = UsuarioDAO.getUsuario(autenticador, conn);
+				conn.close();
 				UserHolder holder = UserHolder.getInstance();
 				holder.setUser(user);
-				System.out.println("fase3");
-				MenuView teste = new MenuView();
-				teste.start(stage);
+				MenuView menu = new MenuView();
+				menu.start(stage);
 			}
 			else if(autenticador ==-1){
 				errorLabel.setText("Usuário não encontrado");	
@@ -98,11 +93,12 @@ public class LoginController {
 		}
 		catch (Exception e) {
 			myLabel.setText("error");
+			System.out.println(e.toString());
 		}
 	}
 	
 	public void registerRedirect() {
-		
+		stage = (Stage) registerLabel.getScene().getWindow();
 		System.out.println("oii");
 		
 		

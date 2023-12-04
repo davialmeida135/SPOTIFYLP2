@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.spotify.data.DataBase;
+import com.spotify.model.Usuario;
 //Classe que utilizará os métodos fornecidos pela classe Database
 //Para adicionar, remover, diferenciar e modificar usuários
 public class UsuarioDAO {
@@ -21,8 +22,6 @@ public class UsuarioDAO {
             pstmt.setString(4, senha);
             pstmt.executeUpdate();
    
-            int userId = getUserId(usuario,conn);
-            PlaylistDAO.novaPlaylist("Musicas", "Todas as músicas adicionadas", userId, conn);
             System.out.println("Usuário criado com sucesso!");
         } catch (SQLException e) {
             System.out.println(e.getMessage()); 
@@ -40,7 +39,7 @@ public class UsuarioDAO {
 			ResultSet rs = stmt.executeQuery();
 			if(!rs.next()) {
 				//System.out.println("Usuário não encontrado.");
-				return 404;
+				return -2;
 			}
 			else{
 				//System.out.println("Usuario encontrado!");
@@ -115,6 +114,36 @@ public class UsuarioDAO {
 	            System.out.println(e.getMessage());  
 	        }   
 		return -3;
+	}
+	
+	public static Usuario getUsuario(int userId, Connection conn) {
+		Usuario usuario = new Usuario();
+		String sql = "SELECT usuarios.username,usuarios.nome,usuarios.tipo\r\n"
+		  		+ "FROM usuarios\r\n"
+		  		+ "WHERE usuarios.id = ?;";
+		
+		
+		PreparedStatement stmt;
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if(!rs.next()) {
+		  		System.out.println("Usuário não encontrado.");
+		  		return null;
+		  	}
+			usuario.setId(userId);
+			usuario.setNome(rs.getString("nome"));
+			usuario.setTipo(rs.getString("tipo"));
+			usuario.setUsuario(rs.getString("username"));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+	  	
+		return usuario;
+
 	}
 
 }

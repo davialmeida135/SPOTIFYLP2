@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 public class LoginView extends Application{
 	public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("templates/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("./templates/Login.fxml"));
         Scene scene = new Scene(loader.load());
         stage.setScene(scene);
         stage.setTitle("Login");

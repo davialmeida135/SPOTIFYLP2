@@ -1,14 +1,13 @@
 package com.spotify.view;
+import java.io.IOException;
 import java.sql.Connection;
-
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.spotify.control.*;
 import com.spotify.view.*;
 import com.spotify.dao.*;
-import com.spotify.data.DataBase;
+import com.spotify.data.*;
 import com.spotify.model.Musica;
 
 //No momento apenas testes da database
@@ -18,16 +17,28 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
 		  
+		  
+		  
 		  LoginView.play_login(args);
 		  
 	}
 		  
-			/*Connection conn = DataBase.connect("database.db");
+			/*try {
+			Connection conn = DataBase.connect("database.db");
+			Arquivos.copyAllFiles("./storage/teste",conn);
+			conn.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
+			UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
+		  UsuarioDAO.novoUsuario("Adminilson","admin","admin","VIP",conn);
 		  ArrayList<Musica> musicas= PlaylistDAO.getMusicasPlaylist(1, conn);
 		  System.out.println(musicas.get(0).getNome());
 		  System.out.println(musicas.get(1).getNome());
 		  System.out.println(musicas);
-		  //UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
+		  //
 		  conn.close();
 		  //createNewDatabase("database.db");
 		  Connection conn = DataBase.connect("database.db");

@@ -15,7 +15,7 @@ public class MusicaDAO {
 	
 	//Adiciona uma musica à database
 	public static void novaMusica(String nome, String path,int userId ,Connection conn) {
-	    String sql = "INSERT INTO musicas (nome, path) VALUES (?, ?)";
+	    String sql = "INSERT INTO musicas (titulo, path) VALUES (?, ?)";
 
 	    try {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class MusicaDAO {
 	}
 	
 	public static void removerMusica(String nome, Connection conn) {
-	    String sql = "DELETE FROM musicas WHERE nome = ?";
+	    String sql = "DELETE FROM musicas WHERE titulo = ?";
 
 	    try {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -73,12 +73,12 @@ public class MusicaDAO {
 	}
 	
 	public static int getMusicaId(String nome, int userId, Connection conn) {
-	    String sql = "SELECT musicas.id FROM musicas WHERE musicas.nome = ? AND musicas.proprietario_id = ?";
+	    String sql = "SELECT musicas.id FROM musicas WHERE musicas.titulo = ?";
 
 	    try {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	        pstmt.setString(1, nome);
-	        pstmt.setInt(2, userId);
+	        //pstmt.setInt(2, userId);
 
 	        ResultSet rs = pstmt.executeQuery();
 
@@ -98,7 +98,7 @@ public class MusicaDAO {
 	public static String getMusicaPath(String nome, int userId,Connection conn) {
 		String path = null;
 		String sql = "SELECT musicas.path FROM musicas "
-				+ "WHERE musicas.nome = ?";
+				+ "WHERE musicas.titulo = ?";
 		
 		PreparedStatement pstmt;
 		try {

@@ -43,17 +43,38 @@ public class DataBase {
 	        }  
 	        
 	    }  
-	public static void createNewTable(Connection conn) {  
+	public static void criarTodasTabelas(Connection conn) {  
 	        // SQLite connection string 
 	          
 	        // SQL statement for creating a new table  
-	        String sql ="CREATE TABLE usuarios (\r\n"
+	        String sql ="CREATE TABLE musicas (\r\n"
+	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
+	        		+ "    titulo TEXT NOT NULL UNIQUE,\r\n"
+	        		+ "    path TEXT NOT NULL,\r\n"
+	        		+ "	   autor TEXT"
+	        		+ ");\r\n"
+	        		+ "CREATE TABLE playlists (\r\n"
+	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
+	        		+ "    nome TEXT NOT NULL UNIQUE,\r\n"
+	        		+ " proprietario_id INTEGER"
+	        		+ ");\r\n"
+	        		+ "CREATE TABLE musicas_e_playlists (\r\n"
+	        		+ "    id_musica INTEGER NOT NULL,\r\n"
+	        		+ "    id_playlist INTEGER NOT NULL,\r\n"
+	        		+ "    FOREIGN KEY (id_musica) REFERENCES musicas (id),\r\n"
+	        		+ "    FOREIGN KEY (id_playlist) REFERENCES playlists (id)\r\n"
+	        		+ ");\r\n"
+	        		+ "CREATE TABLE usuarios (\r\n"
 	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
 	        		+ "    nome TEXT NOT NULL,\r\n"
 	        		+ "    tipo TEXT NOT NULL,\r\n"
-	        		+ "    username TEXT NOT NULL,\r\n"
+	        		+ "    username TEXT NOT NULL UNIQUE,\r\n"
 	        		+ "    password TEXT NOT NULL\r\n"
-	        		+ ");";
+	        		+ ");\r\n"
+	        		+ "CREATE TABLE diretorios (\r\n"
+	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
+	        		+ "    path TEXT NOT NULL ,\r\n"
+	        		+ ");\r\n";
 	          
 	        try{   
 	            Statement stmt = conn.createStatement();  
@@ -64,6 +85,23 @@ public class DataBase {
 	    }  
 	   
 	   
+		public static void criarTabela(Connection conn) {  
+	        // SQLite connection string 
+	          
+	        // SQL statement for creating a new table  
+	        String sql ="CREATE TABLE diretorios (\r\n"
+	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
+	        		+ "    path TEXT NOT NULL ,\r\n"
+	        		+ ");\r\n";
+	          
+	        try{   
+	            Statement stmt = conn.createStatement();  
+	            stmt.execute(sql);  
+	        } catch (SQLException e) {  
+	            System.out.println(e.getMessage());  
+	        }  
+	    }  	
+
 	   public static void insert_user(Connection conn,String nome, String tipo, String username, String password) {  
 	        String sql = "INSERT INTO usuarios(nome, tipo,username,password) VALUES(?,?,?,?)";  
 	   
@@ -191,32 +229,21 @@ public class DataBase {
 	        }  
 	    }
 	  
-	  //Busca de usuario a partir de um username
-	  public static void busca_usuario(Connection conn, String nome_usuario) {
-		  String sql = "SELECT usuarios.id, usuarios.nome, usuarios.password\r\n"
-			  		+ "FROM usuarios\r\n"
-			  		+ "WHERE usuarios.username = ?;";
-		  
-		  try {          
-			  	PreparedStatement stmt = conn.prepareStatement(sql);  
-			  	stmt.setString(1, nome_usuario);
-			  	ResultSet rs = stmt.executeQuery();
-			  	
-			  	if(!rs.next()) {
-			  		System.out.println("Nenhum usuário com este nome foi encontrado.");
-			  		return;
-			  	}
-			  	
-			  	do{  
-	                System.out.println(rs.getInt("id") +  "\t" +   
-	                                   rs.getString("nome") + "\t" +
-	                                   rs.getString("password")+ "\t");  
-	            } while (rs.next()) ;
-	           
-	        } catch (SQLException e) {  
-	            System.out.println(e.getMessage());  
+	  public static void insert_diretorio(Connection conn,String path) {  
+	        String sql = "INSERT INTO diretorios(path) VALUES(?)";  
+	   
+	        try{
+	            PreparedStatement pstmt = conn.prepareStatement(sql);  
+	            pstmt.setString(1, path);  
+
+	            pstmt.executeUpdate();
+	            System.out.println("Diretorio inserido com sucesso!");
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage()); 
 	        }  
 	  }
+	  
+	  
 	  
 }
 	  
