@@ -88,4 +88,58 @@ public class MenuController {
 
 	}
 	
+	@FXML
+    void previousAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playAction(ActionEvent event) {
+    	String[] t = null;
+		  // Create and start the application
+    	MusicPlayer player = MusicPlayer.getInstance();
+    	player.tocar();
+    	
+    }
+
+    @FXML
+    void pauseAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void nextAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void addPlaylist(ActionEvent event) {
+
+    }
+
+    @FXML
+    void removePlaylist(ActionEvent event) {
+
+    }
+
+    @FXML
+    void importFile(ActionEvent event) {
+
+    }
+
+    @FXML
+    void importFolder(ActionEvent event) {
+
+    }
+
+    @FXML
+    void addToPlaylist(ActionEvent event) {
+
+    }
+
+    @FXML
+    void removeFromPlaylist(ActionEvent event) {
+
+    }
+	
 }

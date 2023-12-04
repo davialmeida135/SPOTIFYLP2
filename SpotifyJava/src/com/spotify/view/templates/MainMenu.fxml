@@ -79,18 +79,18 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="239.0" layoutY="484.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Anterior" />
-            <Button layoutX="318.0" layoutY="484.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Play" />
-            <Button layoutX="393.0" layoutY="484.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Pause" />
-            <Button layoutX="473.0" layoutY="484.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Proxima" />
-            <Button layoutX="34.0" layoutY="393.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="103.0" text="Nova Playlist" />
-            <Button layoutX="34.0" layoutY="434.0" mnemonicParsing="false" text="Remover Playlist" />
+            <Button layoutX="239.0" layoutY="484.0" mnemonicParsing="false" onAction="#previousAction" prefHeight="25.0" prefWidth="68.0" text="Anterior" />
+            <Button layoutX="318.0" layoutY="484.0" mnemonicParsing="false" onAction="#playAction" prefHeight="25.0" prefWidth="68.0" text="Play" />
+            <Button layoutX="393.0" layoutY="484.0" mnemonicParsing="false" onAction="#pauseAction" prefHeight="25.0" prefWidth="68.0" text="Pause" />
+            <Button layoutX="473.0" layoutY="484.0" mnemonicParsing="false" onAction="#nextAction" prefHeight="25.0" prefWidth="68.0" text="Proxima" />
+            <Button layoutX="34.0" layoutY="393.0" mnemonicParsing="false" onAction="#addPlaylist" prefHeight="25.0" prefWidth="103.0" text="Nova Playlist" />
+            <Button layoutX="34.0" layoutY="434.0" mnemonicParsing="false" onAction="#removePlaylist" text="Remover Playlist" />
             <TextField layoutX="147.0" layoutY="434.0" prefHeight="25.0" prefWidth="115.0" />
-            <Button layoutX="673.0" layoutY="356.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Importar música" />
-            <Button layoutX="673.0" layoutY="306.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Importar diretório" />
-            <Button layoutX="292.0" layoutY="393.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Adicionar à playlist:" />
+            <Button layoutX="673.0" layoutY="356.0" mnemonicParsing="false" onAction="#importFile" prefHeight="25.0" prefWidth="143.0" text="Importar música" />
+            <Button layoutX="673.0" layoutY="306.0" mnemonicParsing="false" onAction="#importFolder" prefHeight="25.0" prefWidth="143.0" text="Importar diretório" />
+            <Button layoutX="292.0" layoutY="393.0" mnemonicParsing="false" onAction="#addToPlaylist" prefHeight="25.0" prefWidth="121.0" text="Adicionar à playlist:" />
             <TextField layoutX="422.0" layoutY="393.0" prefHeight="25.0" prefWidth="103.0" />
-            <Button layoutX="292.0" layoutY="434.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="233.0" text="Remover da playlist atual" />
+            <Button layoutX="292.0" layoutY="434.0" mnemonicParsing="false" onAction="#removeFromPlaylist" prefHeight="25.0" prefWidth="233.0" text="Remover da playlist atual" />
             <Text layoutX="255.0" layoutY="556.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Música tocando agora" wrappingWidth="274.13671875">
                <font>
                   <Font name="Constantia Bold" size="14.0" />

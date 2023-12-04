@@ -1,14 +1,13 @@
 package com.spotify.view;
+import java.io.IOException;
 import java.sql.Connection;
-
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.spotify.control.*;
 import com.spotify.view.*;
 import com.spotify.dao.*;
-import com.spotify.data.DataBase;
+import com.spotify.data.*;
 import com.spotify.model.Musica;
 
 //No momento apenas testes da database
@@ -17,9 +16,16 @@ import com.spotify.model.Musica;
 public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
-
-		 
-		  LoginView.play_login(args);
+		  
+		  try {
+			Arquivos.copyAllFiles("./storage/teste");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
+		  
+		  //LoginView.play_login(args);
 		  
 	}
 		  

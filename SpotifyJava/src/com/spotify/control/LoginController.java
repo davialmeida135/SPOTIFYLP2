@@ -98,7 +98,7 @@ public class LoginController {
 	}
 	
 	public void registerRedirect() {
-		
+		stage = (Stage) registerLabel.getScene().getWindow();
 		System.out.println("oii");
 		
 		
