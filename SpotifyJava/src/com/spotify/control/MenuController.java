@@ -11,6 +11,8 @@ import com.spotify.model.Usuario;
 import com.spotify.view.LoginView;
 import com.spotify.view.MenuView;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
@@ -36,6 +38,8 @@ public class MenuController {
     private Label usernameHolder;
     @FXML
     private Label nameHolder;
+    @FXML
+    private ListView<String> listaDiretorios;
 
     UserHolder holder=UserHolder.getInstance();
     Usuario loggedUser=holder.getUser();
@@ -59,9 +63,31 @@ public class MenuController {
 		
 		Connection conn = DataBase.connect("database.db");
 		loadPlaylists(loggedUser.getId(),conn);
-		conn.close();
+		ListaPlaylists.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
+			 @Override
+			    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			        if(newValue.equals("Musicas")) {
+			        	loadMusicas(newValue, 0, conn);
+			        }
+			        else {
+			        	loadMusicas(newValue,loggedUser.getId(),conn);
+			        }
+			    }
+			
+		});
+		
 		
 		System.out.println(loggedUser.getNome());
+		String playlistSelecionada = null;
+		/*while(true) {
+			String novaSelecao = ListaPlaylists.getSelectionModel().getSelectedItem();
+			if(!novaSelecao.equals(playlistSelecionada)) {
+				loadMusicas(novaSelecao,0, conn);
+			}
+			
+			
+		}*/
+		
 		
 	}
 	
@@ -70,7 +96,7 @@ public class MenuController {
 		String sql = "SELECT playlists.nome FROM playlists WHERE proprietario_id = ?";
 		ListaPlaylists.getItems().add("Musicas");
 		if(loggedUser.getTipo().equals("VIP")) {
-			System.out.println("é um vip, procurando playlists");
+			System.out.println("É um vip, procurando playlists");
 			try {
 			PreparedStatement stmt = conn.prepareStatement(sql); 
 			stmt.setInt(1, userId);
@@ -86,6 +112,34 @@ public class MenuController {
 		}
 		}
 
+	}
+	
+	public void loadMusicas(String nomePlaylist, int userId, Connection conn) {
+		String sql = "SELECT m.titulo AS musica\r\n"
+				+ "FROM musicas AS m\r\n"
+				+ "JOIN musicas_e_playlists AS mep ON m.id = mep.id_musica\r\n"
+				+ "JOIN playlists AS p ON mep.id_playlist = p.id\r\n"
+				+ "WHERE p.nome = ? AND p.proprietario_id = ?";
+		
+		PreparedStatement stmt;
+		listaMusicas.getItems().clear();
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1,nomePlaylist);
+			stmt.setInt(2, userId);
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				listaMusicas.getItems().add(rs.getString("musica"));
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 	}
 	
 	@FXML
@@ -131,7 +185,10 @@ public class MenuController {
     void importFolder(ActionEvent event) {
 
     }
+    @FXML
+    void removeFolder(ActionEvent event) {
 
+    }
     @FXML
     void addToPlaylist(ActionEvent event) {
 

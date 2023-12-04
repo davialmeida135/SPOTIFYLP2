@@ -58,23 +58,25 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#83a8c5" height="572.0" layoutX="-4.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="836.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#56799a" height="540.0" layoutX="657.0" stroke="BLACK" strokeType="INSIDE" width="174.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="102.0" layoutY="470.0" stroke="BLACK" strokeType="INSIDE" width="831.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="339.0" layoutX="293.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5770" height="339.0" layoutX="34.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="195.0" layoutX="510.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="133.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="339.0" layoutX="275.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="214.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5770" height="339.0" layoutX="34.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="214.0" />
             <ProgressBar layoutX="229.0" layoutY="520.0" prefHeight="18.0" prefWidth="327.0" progress="0.0" />
             <Button layoutX="673.0" layoutY="406.0" mnemonicParsing="false" onAction="#logOut" prefHeight="39.0" prefWidth="143.0" text="Log out">
       		         <font>
       		            <Font size="18.0" />
       		         </font>
             </Button>
-            <TextField layoutX="147.0" layoutY="393.0" prefHeight="25.0" prefWidth="115.0" />
-            <ListView fx:id="ListaPlaylists" layoutX="42.0" layoutY="51.0" prefHeight="319.0" prefWidth="214.0" />
-            <ListView fx:id="listaMusicas" layoutX="301.0" layoutY="49.0" prefHeight="319.0" prefWidth="214.0" />
+            <TextField layoutX="147.0" layoutY="393.0" prefHeight="25.0" prefWidth="103.0" />
+            <ListView fx:id="ListaPlaylists" layoutX="44.0" layoutY="52.0" prefHeight="319.0" prefWidth="195.0" />
+            <ListView fx:id="listaDiretorios" layoutX="518.0" layoutY="52.0" prefHeight="174.0" prefWidth="118.0" />
+            <ListView fx:id="listaMusicas" layoutX="285.0" layoutY="51.0" prefHeight="319.0" prefWidth="195.0" />
             <Label layoutX="34.0" layoutY="14.0" text="Playlists" textFill="#141517">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="293.0" layoutY="14.0" text="Músicas" textFill="#141517">
+            <Label layoutX="275.0" layoutY="14.0" text="Músicas" textFill="#141517">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -85,12 +87,12 @@
             <Button layoutX="473.0" layoutY="484.0" mnemonicParsing="false" onAction="#nextAction" prefHeight="25.0" prefWidth="68.0" text="Proxima" />
             <Button layoutX="34.0" layoutY="393.0" mnemonicParsing="false" onAction="#addPlaylist" prefHeight="25.0" prefWidth="103.0" text="Nova Playlist" />
             <Button layoutX="34.0" layoutY="434.0" mnemonicParsing="false" onAction="#removePlaylist" text="Remover Playlist" />
-            <TextField layoutX="147.0" layoutY="434.0" prefHeight="25.0" prefWidth="115.0" />
-            <Button layoutX="673.0" layoutY="356.0" mnemonicParsing="false" onAction="#importFile" prefHeight="25.0" prefWidth="143.0" text="Importar música" />
-            <Button layoutX="673.0" layoutY="306.0" mnemonicParsing="false" onAction="#importFolder" prefHeight="25.0" prefWidth="143.0" text="Importar diretório" />
-            <Button layoutX="292.0" layoutY="393.0" mnemonicParsing="false" onAction="#addToPlaylist" prefHeight="25.0" prefWidth="121.0" text="Adicionar à playlist:" />
-            <TextField layoutX="422.0" layoutY="393.0" prefHeight="25.0" prefWidth="103.0" />
-            <Button layoutX="292.0" layoutY="434.0" mnemonicParsing="false" onAction="#removeFromPlaylist" prefHeight="25.0" prefWidth="233.0" text="Remover da playlist atual" />
+            <TextField layoutX="147.0" layoutY="434.0" prefHeight="25.0" prefWidth="103.0" />
+            <Button layoutX="511.0" layoutY="258.0" mnemonicParsing="false" onAction="#importFile" prefHeight="25.0" prefWidth="133.0" text="Importar música" />
+            <Button layoutX="511.0" layoutY="307.0" mnemonicParsing="false" onAction="#importFolder" prefHeight="25.0" prefWidth="133.0" text="Importar diretório" />
+            <Button layoutX="274.0" layoutY="393.0" mnemonicParsing="false" onAction="#addToPlaylist" prefHeight="25.0" prefWidth="127.0" text="Adicionar à playlist:" />
+            <TextField layoutX="404.0" layoutY="393.0" prefHeight="25.0" prefWidth="87.0" />
+            <Button layoutX="274.0" layoutY="434.0" mnemonicParsing="false" onAction="#removeFromPlaylist" prefHeight="25.0" prefWidth="214.0" text="Remover da playlist atual" />
             <Text layoutX="255.0" layoutY="556.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Música tocando agora" wrappingWidth="274.13671875">
                <font>
                   <Font name="Constantia Bold" size="14.0" />
@@ -118,6 +120,12 @@
             <Label fx:id="typeHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="260.0" prefHeight="20.0" prefWidth="127.0" text="typeHolder" textAlignment="RIGHT" textFill="#000000">
                <font>
                   <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button layoutX="510.0" layoutY="359.0" mnemonicParsing="false" onAction="#removeFolder" prefHeight="25.0" prefWidth="133.0" text="Remover diretório" />
+            <Label layoutX="511.0" layoutY="17.0" text="Diretórios" textFill="#141517">
+               <font>
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
       </children>

@@ -2,7 +2,11 @@ package com.spotify.data;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.*;
+import java.sql.Connection;
 import java.util.stream.Stream;
+
+import com.spotify.dao.MusicaDAO;
+import com.spotify.dao.PlaylistDAO;
 
 
 public class Arquivos {
@@ -42,7 +46,7 @@ public class Arquivos {
 		}
 	 
 	 //Escaneia todos os arquivos de uma pasta
-	 public static void copyAllFiles(String path) throws IOException {
+	 public static void copyAllFiles(String path,Connection conn) throws IOException {
 	 
 	 	String destino = "./storage/musicas";
 	     
@@ -57,7 +61,7 @@ public class Arquivos {
   
             if (f.isDirectory() && f.exists()) { 
                 try { 
-                	copyAllFiles(f.getPath()); 
+                	copyAllFiles(f.getPath(),conn); 
                 } 
                 catch (Exception e) { 
                     e.printStackTrace(); 
@@ -67,11 +71,17 @@ public class Arquivos {
             else if (!f.isDirectory() && f.exists()) { 
                 // using file filter 
                 if (filter.accept(f)) {
-                    System.out.println(f.getName());
+                    System.out.println(f.getName().substring(0,f.getName().length()-4));
+                    
+                    String filename = f.getName().substring(0,f.getName().length()-4);
                     
                     Path destinoPath = Paths.get(destino+"/"+f.getName());
                     Path filePath = Paths.get(f.getPath());
                     Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
+                    MusicaDAO.novaMusica(filename, destino+"/"+f.getName(), 0, conn);
+                    
+                    PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
+                    
                 } 
             } 
 	    } 

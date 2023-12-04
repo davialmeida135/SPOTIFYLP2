@@ -17,19 +17,21 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
 		  
-		  try {
-			Arquivos.copyAllFiles("./storage/teste");
+		  
+		  
+		  LoginView.play_login(args);
+		  
+	}
+		  
+			/*try {
+			Connection conn = DataBase.connect("database.db");
+			Arquivos.copyAllFiles("./storage/teste",conn);
+			conn.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		  
-		  
-		  //LoginView.play_login(args);
-		  
-	}
-		  
-			/*
 			UsuarioDAO.novoUsuario("Joao vitor", "calangofange", "123", "VIP", conn);
 		  UsuarioDAO.novoUsuario("Adminilson","admin","admin","VIP",conn);
 		  ArrayList<Musica> musicas= PlaylistDAO.getMusicasPlaylist(1, conn);
