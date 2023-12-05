@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.spotify.data.DataBase;
 import com.spotify.model.Musica;
@@ -119,9 +121,9 @@ public class PlaylistDAO {
     }
 	
     
-	//Retorna um array com todas as musicas de uma playlist
-	public static ArrayList<Musica> getMusicasPlaylist(int playlistId,Connection conn) throws SQLException{
-		ArrayList<Musica> musicas = new ArrayList<Musica>();
+	//Retorna uma fila com todas as musicas de uma playlist
+	public static Queue<Musica> getMusicasPlaylist(int playlistId,Connection conn) throws SQLException{
+		Queue<Musica> musicas = new LinkedList<Musica>();
 		//Musica novaMusica = new Musica();
 		String sql = "SELECT m.titulo, m.path "
                 + "FROM playlists p "

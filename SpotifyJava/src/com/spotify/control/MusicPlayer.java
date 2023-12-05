@@ -1,7 +1,6 @@
 package com.spotify.control;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -78,7 +77,7 @@ public class MusicPlayer extends Application {
 	}
 
 	public void setFila(Queue<Musica> fila) {
-		this.fila = fila;
+		MusicPlayer.fila = fila;
 	}
 	
 	public static void limparFila() {
