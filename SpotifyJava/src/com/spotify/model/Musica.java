@@ -7,6 +7,19 @@ public class Musica {
 	private String nome;
 	private String path;
 	private int userId;
+	
+	
+	public Musica(String nome, String path) {
+		super();
+	
+		this.nome = nome;
+		this.path = path;
+	}
+	
+	public Musica() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}

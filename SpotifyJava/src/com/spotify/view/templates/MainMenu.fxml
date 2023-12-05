@@ -62,7 +62,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="339.0" layoutX="275.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="214.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5770" height="339.0" layoutX="34.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="214.0" />
             <ProgressBar layoutX="229.0" layoutY="520.0" prefHeight="18.0" prefWidth="327.0" progress="0.0" />
-            <Button layoutX="673.0" layoutY="406.0" mnemonicParsing="false" onAction="#logOut" prefHeight="39.0" prefWidth="143.0" text="Log out">
+            <Button layoutX="672.0" layoutY="415.0" mnemonicParsing="false" onAction="#logOut" prefHeight="39.0" prefWidth="143.0" text="Log out">
       		         <font>
       		            <Font size="18.0" />
       		         </font>
@@ -88,8 +88,8 @@
             <Button layoutX="34.0" layoutY="393.0" mnemonicParsing="false" onAction="#addPlaylist" prefHeight="25.0" prefWidth="103.0" text="Nova Playlist" />
             <Button layoutX="34.0" layoutY="434.0" mnemonicParsing="false" onAction="#removePlaylist" text="Remover Playlist" />
             <TextField layoutX="147.0" layoutY="434.0" prefHeight="25.0" prefWidth="103.0" />
-            <Button layoutX="511.0" layoutY="258.0" mnemonicParsing="false" onAction="#importFile" prefHeight="25.0" prefWidth="133.0" text="Importar música" />
-            <Button layoutX="511.0" layoutY="307.0" mnemonicParsing="false" onAction="#importFolder" prefHeight="25.0" prefWidth="133.0" text="Importar diretório" />
+            <Button layoutX="678.0" layoutY="286.0" mnemonicParsing="false" onAction="#importFile" prefHeight="25.0" prefWidth="133.0" text="Importar música" />
+            <Button layoutX="677.0" layoutY="328.0" mnemonicParsing="false" onAction="#importFolder" prefHeight="25.0" prefWidth="133.0" text="Importar diretório" />
             <Button layoutX="274.0" layoutY="393.0" mnemonicParsing="false" onAction="#addToPlaylist" prefHeight="25.0" prefWidth="127.0" text="Adicionar à playlist:" />
             <TextField layoutX="404.0" layoutY="393.0" prefHeight="25.0" prefWidth="87.0" />
             <Button layoutX="274.0" layoutY="434.0" mnemonicParsing="false" onAction="#removeFromPlaylist" prefHeight="25.0" prefWidth="214.0" text="Remover da playlist atual" />
@@ -117,17 +117,20 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="typeHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="260.0" prefHeight="20.0" prefWidth="127.0" text="typeHolder" textAlignment="RIGHT" textFill="#000000">
+            <Label fx:id="typeHolder" alignment="CENTER_RIGHT" layoutX="681.0" layoutY="250.0" prefHeight="20.0" prefWidth="127.0" text="typeHolder" textAlignment="RIGHT" textFill="#000000">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="510.0" layoutY="359.0" mnemonicParsing="false" onAction="#removeFolder" prefHeight="25.0" prefWidth="133.0" text="Remover diretório" />
+            <Button layoutX="677.0" layoutY="368.0" mnemonicParsing="false" onAction="#removeFolder" prefHeight="25.0" prefWidth="133.0" text="Remover diretório" />
             <Label layoutX="511.0" layoutY="17.0" text="Diretórios" textFill="#141517">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
+            <Button layoutX="505.0" layoutY="353.0" mnemonicParsing="false" onAction="#adicionarMusicaFila" prefHeight="27.0" prefWidth="143.0" text="Adicionar musica à fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />
+            <Button layoutX="505.0" layoutY="392.0" mnemonicParsing="false" onAction="#adicionarPlaylistFila" prefHeight="27.0" prefWidth="143.0" text="Adicionar playlist à fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />
+            <Button layoutX="505.0" layoutY="433.0" mnemonicParsing="false" onAction="#limparFila" prefHeight="27.0" prefWidth="143.0" text="Limpar fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />
       </children>
     </AnchorPane>
   </children>

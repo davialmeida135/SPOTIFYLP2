@@ -129,10 +129,8 @@ public class MenuController {
 			stmt.setInt(2, userId);
 			ResultSet rs = stmt.executeQuery();
 			
-			while(rs.next()) {
-				
-				listaMusicas.getItems().add(rs.getString("musica"));
-				
+			while(rs.next()) {	
+				listaMusicas.getItems().add(rs.getString("musica"));	
 			}
 			
 		} catch (SQLException e) {
@@ -141,11 +139,6 @@ public class MenuController {
 		} 
 		
 	}
-	
-	@FXML
-    void previousAction(ActionEvent event) {
-
-    }
 
     @FXML
     void playAction(ActionEvent event) {
@@ -155,10 +148,14 @@ public class MenuController {
     	player.tocar();
     	
     }
+	@FXML
+    void previousAction(ActionEvent event) {
 
+    }
     @FXML
     void pauseAction(ActionEvent event) {
-
+    	MusicPlayer player = MusicPlayer.getInstance();
+    	player.pausar();
     }
 
     @FXML
@@ -196,6 +193,21 @@ public class MenuController {
 
     @FXML
     void removeFromPlaylist(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void adicionarMusicaFila(ActionEvent event) {
+
+    }
+
+    @FXML
+    void adicionarPlaylistFila(ActionEvent event) {
+
+    }
+
+    @FXML
+    void limparFila(ActionEvent event) {
 
     }
 	
