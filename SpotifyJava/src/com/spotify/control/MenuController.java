@@ -1,12 +1,18 @@
 package com.spotify.control;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Queue;
 
+import com.spotify.dao.MusicaDAO;
+import com.spotify.dao.PlaylistDAO;
+import com.spotify.data.Arquivos;
 import com.spotify.data.DataBase;
+import com.spotify.model.Musica;
 import com.spotify.model.Usuario;
 import com.spotify.view.LoginView;
 import com.spotify.view.MenuView;
@@ -14,20 +20,29 @@ import com.spotify.view.MenuView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
 
 public class MenuController {
+    @FXML
+    private AnchorPane anchorPane;
 	@FXML
     private ListView<String> ListaPlaylists;
     @FXML
@@ -40,9 +55,65 @@ public class MenuController {
     private Label nameHolder;
     @FXML
     private ListView<String> listaDiretorios;
-
+    @FXML
+    private MenuButton importBotao;
+    @FXML
+    private Slider volumeSlider;
+    
+    @FXML
+    private TextField addToPlaylistField;
+    @FXML
+    private TextField novaPlaylistField;
+    @FXML
+    private TextField removerPlaylistField;
+    
+    Connection conn = DataBase.connect("database.db");
+    
     UserHolder holder=UserHolder.getInstance();
     Usuario loggedUser=holder.getUser();
+
+    Stage stage = holder.getStage();
+    
+    MusicPlayer player = MusicPlayer.getInstance();
+    
+    private void configMenuButton(Connection conn) {
+    	MenuItem botaoImportarMusica = new MenuItem("Música");
+    	MenuItem botaoImportarDiretorio = new MenuItem("Diretório");
+    	importBotao.getItems().clear();
+    	importBotao.getItems().add(botaoImportarMusica);
+    	importBotao.getItems().add(botaoImportarDiretorio);
+    	
+    	EventHandler<ActionEvent> importarMusica = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+        		
+            	FileChooser fileChooser = new FileChooser();
+            	fileChooser.setTitle("Escolha um arquivo .mp3 ou .wav");
+            	File file = fileChooser.showOpenDialog(stage);
+            	try {
+					Arquivos.copyFile(file, conn);
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+            	System.out.println(file.getName());
+                
+            }
+        };
+        EventHandler<ActionEvent> importarDiretorio = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+            	DirectoryChooser directoryChooser = new DirectoryChooser();
+            	directoryChooser.setTitle("Escolha um diretório");
+            	File file = directoryChooser.showDialog(stage);
+            	System.out.println(file.getName());
+                System.out.println("fon2");
+                MusicaDAO.novoDiretorio(file, conn);
+            }
+        };
+        botaoImportarMusica.setOnAction(importarMusica);
+        botaoImportarDiretorio.setOnAction(importarDiretorio);
+    }
     
 	
 	@FXML
@@ -50,18 +121,20 @@ public class MenuController {
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		
 		LoginView login = new LoginView();
+		conn.close();
 		login.start(stage);
 	}
 	
 	public void initialize() throws SQLException {
 		
-		//System.out.println("Inicializou");
+		System.out.println("Inicializou");
 		
 		nameHolder.setText(loggedUser.getNome());
 		usernameHolder.setText(loggedUser.getUsuario());
 		typeHolder.setText(loggedUser.getTipo());
 		
-		Connection conn = DataBase.connect("database.db");
+		
+		configMenuButton(conn);
 		loadPlaylists(loggedUser.getId(),conn);
 		ListaPlaylists.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
 			 @Override
@@ -73,21 +146,9 @@ public class MenuController {
 			        	loadMusicas(newValue,loggedUser.getId(),conn);
 			        }
 			    }
-			
 		});
 		
-		
 		System.out.println(loggedUser.getNome());
-		String playlistSelecionada = null;
-		/*while(true) {
-			String novaSelecao = ListaPlaylists.getSelectionModel().getSelectedItem();
-			if(!novaSelecao.equals(playlistSelecionada)) {
-				loadMusicas(novaSelecao,0, conn);
-			}
-			
-			
-		}*/
-		
 		
 	}
 	
@@ -142,9 +203,7 @@ public class MenuController {
 
     @FXML
     void playAction(ActionEvent event) {
-    	String[] t = null;
-		  // Create and start the application
-    	MusicPlayer player = MusicPlayer.getInstance();
+    	
     	player.tocar();
     	
     }
@@ -154,61 +213,74 @@ public class MenuController {
     }
     @FXML
     void pauseAction(ActionEvent event) {
-    	MusicPlayer player = MusicPlayer.getInstance();
+    	
     	player.pausar();
     }
 
     @FXML
     void nextAction(ActionEvent event) {
+    	MusicPlayer.getFila().remove();
+    	
+    	player.pausar();
+    	player.tocar();
+    	
+    }
+
+    @FXML
+    void criarPlaylist(ActionEvent event) {
+    	
+    }
+
+    @FXML
+    void removerPlaylist(ActionEvent event) {
 
     }
 
     @FXML
-    void addPlaylist(ActionEvent event) {
+    void importarArquivo(ActionEvent event) {
+		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+    	FileChooser fileChooser = new FileChooser();
+    	fileChooser.setTitle("Open Resource File");
+    	File file = fileChooser.showOpenDialog(stage);
+    	System.out.println(file.getName());
+    }
+
+    @FXML
+    void adicionarParaPlaylist(ActionEvent event) {
 
     }
 
     @FXML
-    void removePlaylist(ActionEvent event) {
+    void removerDaPlaylist(ActionEvent event) {
 
     }
 
-    @FXML
-    void importFile(ActionEvent event) {
-
-    }
-
-    @FXML
-    void importFolder(ActionEvent event) {
-
-    }
-    @FXML
-    void removeFolder(ActionEvent event) {
-
-    }
-    @FXML
-    void addToPlaylist(ActionEvent event) {
-
-    }
-
-    @FXML
-    void removeFromPlaylist(ActionEvent event) {
-
-    }
     
     @FXML
     void adicionarMusicaFila(ActionEvent event) {
-
+    	String nome = listaMusicas.getSelectionModel().getSelectedItem();
+    	Musica musica = MusicaDAO.getMusica(nome, conn);
+    	MusicPlayer.getFila().add(musica);
     }
 
     @FXML
     void adicionarPlaylistFila(ActionEvent event) {
-
+    	String playlist = ListaPlaylists.getSelectionModel().getSelectedItem();
+    	int id = PlaylistDAO.getPlaylistId(playlist, loggedUser.getId(), conn);
+    	try {
+			
+    		Queue<Musica> musicasPlaylist = PlaylistDAO.getMusicasPlaylist(id, conn);
+    		MusicPlayer.getFila().addAll(musicasPlaylist);
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     @FXML
     void limparFila(ActionEvent event) {
-
+    	MusicPlayer.limparFila();
     }
 	
 }

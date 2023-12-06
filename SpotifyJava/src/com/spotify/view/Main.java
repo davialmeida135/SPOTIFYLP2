@@ -17,7 +17,8 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		  System.out.print("oi");
 		  
-		  
+		  //Connection conn = DataBase.connect("database.db");
+		 // PlaylistDAO.novaPlaylist("teste", 7, conn);
 		  
 		  LoginView.play_login(args);
 		  

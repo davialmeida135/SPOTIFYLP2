@@ -55,7 +55,7 @@ public class DataBase {
 	        		+ ");\r\n"
 	        		+ "CREATE TABLE playlists (\r\n"
 	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
-	        		+ "    nome TEXT NOT NULL UNIQUE,\r\n"
+	        		+ "    nome TEXT NOT NULL,\r\n"
 	        		+ " proprietario_id INTEGER"
 	        		+ ");\r\n"
 	        		+ "CREATE TABLE musicas_e_playlists (\r\n"

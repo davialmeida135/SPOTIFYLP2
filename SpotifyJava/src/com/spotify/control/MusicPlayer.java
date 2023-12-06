@@ -1,11 +1,7 @@
 package com.spotify.control;
 
 import java.io.File;
-<<<<<<< Updated upstream
-=======
 
-import java.util.ArrayList;
->>>>>>> Stashed changes
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -28,12 +24,12 @@ public class MusicPlayer extends Application {
 	private MediaPlayer currentPlayer;
 	
 	public MusicPlayer() {
-		String q = "./storage/musicas/DreamTeamGanharDragoesNegros.mp3";
+		/*String q = "./storage/musicas/DreamTeamGanharDragoesNegros.mp3";
 		String w = "./storage/musicas/hapi_-_vou_quebrar_tudo.mp3";
 		Musica qm = new Musica("muriz",q);
 		Musica wm = new Musica("hapi",w);
 		fila.add(qm);
-		fila.add(wm);
+		fila.add(wm);*/
 	}
 	
 	private final static MusicPlayer INSTANCE = new MusicPlayer();
@@ -85,11 +81,11 @@ public class MusicPlayer extends Application {
 		return INSTANCE;
 	}
 
-	public Queue<Musica> getFila() {
+	public static Queue<Musica> getFila() {
 		return fila;
 	}
 
-	public void setFila(Queue<Musica> fila) {
+	public static void  setFila(Queue<Musica> fila) {
 		MusicPlayer.fila = fila;
 	}
 	

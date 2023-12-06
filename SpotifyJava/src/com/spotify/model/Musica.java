@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Musica {
 	private int id;
-	private String nome;
+	private String titulo;
 	private String path;
 	private int userId;
 	
 	
-	public Musica(String nome, String path) {
+	public Musica(String titulo, String path) {
 		super();
 	
-		this.nome = nome;
+		this.titulo = titulo;
 		this.path = path;
 	}
 	
@@ -26,11 +26,11 @@ public class Musica {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getNome() {
-		return nome;
+	public String getTitulo() {
+		return titulo;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 	public String getPath() {
 		return path;

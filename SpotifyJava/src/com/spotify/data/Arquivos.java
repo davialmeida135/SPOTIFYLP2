@@ -21,16 +21,40 @@ public class Arquivos {
 				e.printStackTrace();
 			}
 		}
-	 
+	 public static void copyFile(File file,Connection conn) throws IOException {
+		 
+		 	String destino = "./storage/musicas";
+		         
+	        if (file == null) 
+	            return; 
+	        
+	  
+	            
+	        if (file.exists()) { 
+	            // using file filter 
+	            if (filter.accept(file)) {
+	            	String filename = file.getName().substring(0,file.getName().length()-4);
+	                System.out.println(filename);
+	                
+	                
+	                
+	                Path destinoPath = Paths.get(destino+"/"+file.getName());
+	                Path filePath = Paths.get(file.getPath());
+	                Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
+	                MusicaDAO.novaMusica(filename, destino+"/"+file.getName(), conn);
+	                
+	                PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
+	                
+	            } 
+	        } 
+	 } 
+
 	 
 	 //Escaneia todos os arquivos de uma pasta
-	 public static void copyAllFiles(String path,Connection conn) throws IOException {
+	 public static void copyAllFiles(File file,Connection conn) throws IOException {
 	 
 	 	String destino = "./storage/musicas";
-	     
-        File file = new File(path);
-        
-        
+  
   
         File[] files = file.listFiles(); 
         if (files == null) 
@@ -39,7 +63,7 @@ public class Arquivos {
   
             if (f.isDirectory() && f.exists()) { 
                 try { 
-                	copyAllFiles(f.getPath(),conn); 
+                	copyAllFiles(f,conn); 
                 } 
                 catch (Exception e) { 
                     e.printStackTrace(); 
@@ -49,14 +73,13 @@ public class Arquivos {
             else if (!f.isDirectory() && f.exists()) { 
                 // using file filter 
                 if (filter.accept(f)) {
-                    System.out.println(f.getName().substring(0,f.getName().length()-4));
-                    
-                    String filename = f.getName().substring(0,f.getName().length()-4);
+                	String filename = f.getName().substring(0,f.getName().length()-4);
+	                System.out.println(filename);
                     
                     Path destinoPath = Paths.get(destino+"/"+f.getName());
                     Path filePath = Paths.get(f.getPath());
                     Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
-                    MusicaDAO.novaMusica(filename, destino+"/"+f.getName(), 0, conn);
+                    MusicaDAO.novaMusica(filename, destino+"/"+f.getName(), conn);
                     
                     PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
                     

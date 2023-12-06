@@ -25,7 +25,6 @@ import com.spotify.dao.UsuarioDAO;
 public class LoginController {
 	
 	private Stage stage;
-	private Scene scene;
 	private Usuario user;
 
 	@FXML
@@ -74,6 +73,7 @@ public class LoginController {
 				conn.close();
 				UserHolder holder = UserHolder.getInstance();
 				holder.setUser(user);
+				holder.setStage(stage);
 				MenuView menu = new MenuView();
 				menu.start(stage);
 			}
@@ -104,11 +104,4 @@ public class LoginController {
 		
 	}
 
-	public Usuario getUser() {
-		return user;
-	}
-
-	public void setUser(Usuario user) {
-		this.user = user;
-	}
 }
