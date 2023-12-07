@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.Queue;
 
 import com.spotify.dao.MusicaDAO;
@@ -17,6 +18,7 @@ import com.spotify.model.Usuario;
 import com.spotify.view.LoginView;
 import com.spotify.view.MenuView;
 
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -115,11 +117,14 @@ public class MenuController {
         botaoImportarDiretorio.setOnAction(importarDiretorio);
     }
     
+    
+    
 	
 	@FXML
 	public void logOut(ActionEvent event) throws Exception {
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		
+		MusicPlayer.limparFila();
+		player.pausar();
 		LoginView login = new LoginView();
 		conn.close();
 		login.start(stage);
@@ -285,7 +290,7 @@ public class MenuController {
 	
     @FXML
     void refresh(ActionEvent event) {
-  
+    	player.currentPlayer.seek(player.currentPlayer.getCurrentTime());
     }
 
 }

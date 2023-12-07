@@ -12,7 +12,7 @@ import com.spotify.control.MenuController;
 public class MenuView extends Application{
 	private Parent root;
 	public Scene generateScene() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("./templates/MainMenu.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("templates/MainMenu.fxml"));
         Scene scene = new Scene(loader.load());
         return scene;
 	}

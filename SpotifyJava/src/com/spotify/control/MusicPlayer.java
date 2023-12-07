@@ -1,12 +1,8 @@
 package com.spotify.control;
-
 import java.io.File;
-
 import java.util.LinkedList;
 import java.util.Queue;
-
 import com.spotify.model.Musica;
-
 import javafx.application.Application;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -19,9 +15,10 @@ import javafx.util.Duration;
 public class MusicPlayer extends Application {
 	private static Queue<Musica> fila = new LinkedList<Musica>();
 	private static int isPlaying=0;
-	private Duration pauseTime = new Duration(0.0);
+	private static Duration pauseTime = Duration.ZERO;
 	
-	private MediaPlayer currentPlayer;
+	
+	public MediaPlayer currentPlayer =null;
 	
 	public MusicPlayer() {
 		/*String q = "./storage/musicas/DreamTeamGanharDragoesNegros.mp3";
@@ -30,6 +27,7 @@ public class MusicPlayer extends Application {
 		Musica wm = new Musica("hapi",w);
 		fila.add(qm);
 		fila.add(wm);*/
+		
 	}
 	
 	private final static MusicPlayer INSTANCE = new MusicPlayer();
@@ -41,35 +39,50 @@ public class MusicPlayer extends Application {
 	}
 	
 	public void pausar() {
-		if(isPlaying==1) {
-			currentPlayer.pause();
-			isPlaying=0;
-			pauseTime = currentPlayer.getCurrentTime();
-			System.out.println(currentPlayer.getCurrentTime());
-		}	
+		 if (currentPlayer != null && isPlaying ==1) {
+			    pauseTime = currentPlayer.getCurrentTime();
+			    currentPlayer.pause();
+			    System.out.println("Musica pausada em "+pauseTime.toMillis());
+		 } 
+	}
+	
+	public void proximaMusica() {
+		
+	}
+	
+	public void musicaAnterior() {
+		
 	}
 	
 	public void playNextMusicFile(Queue<Musica> fila) {
-		  if (fila.isEmpty()||isPlaying==1) {
-		    return ;
+		  if (fila.isEmpty()) {
+			  return ;
 		  }
+		 
+		  Musica nextMusic = fila.element();
+		  Media media = new Media(new File(nextMusic.getPath()).toURI().toString());
+
 		  
+		  
+		  if (currentPlayer == null || isPlaying == 0) {
+			    currentPlayer = new MediaPlayer(media);
+			    System.out.println("entrou aqui");
+			    currentPlayer.setOnEndOfMedia(() -> {
+			    	System.out.println("cabou");
+				    currentPlayer.dispose();
+				    isPlaying = 0;
+				    pauseTime = Duration.ZERO;
+				    fila.remove();
+				    playNextMusicFile(fila);
+			    });
+		  }
+
 		  isPlaying = 1;
-		  Media media = new Media(new File(fila.element().getPath()).toURI().toString());
-		  MediaPlayer player = new MediaPlayer(media);
-		  currentPlayer = player;
-		  player.setOnEndOfMedia(() -> {
-		    player.dispose();
-		    isPlaying =0;
-		    pauseTime = Duration.ZERO;
-		    fila.remove();
-		    playNextMusicFile(fila);
-		    
-		  });
-		  System.out.println(pauseTime);
-		  player.seek(pauseTime);
-		  player.play();
-	}
+		  System.out.println("Resumindo a musica em "+pauseTime.toMillis());
+		  System.out.println(currentPlayer.getMedia());
+		  currentPlayer.seek(pauseTime);
+		  currentPlayer.play();
+		}
 	
 	@Override
 	public void start(Stage stage) throws Exception {

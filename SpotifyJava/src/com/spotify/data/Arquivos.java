@@ -43,7 +43,7 @@ public class Arquivos {
 	                Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
 	                MusicaDAO.novaMusica(filename, destino+"/"+file.getName(), conn);
 	                
-	                PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
+	                //PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
 	                
 	            } 
 	        } 
@@ -81,7 +81,7 @@ public class Arquivos {
                     Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
                     MusicaDAO.novaMusica(filename, destino+"/"+f.getName(), conn);
                     
-                    PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
+                    //PlaylistDAO.adicionarMusica(filename, 4, 0, conn);
                     
                 } 
             } 

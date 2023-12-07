@@ -19,13 +19,22 @@ public class MusicaDAO {
 	//Adiciona uma musica à database
 	public static void novaMusica(String nome, String path,Connection conn) {
 	    String sql = "INSERT INTO musicas (titulo, path) VALUES (?, ?)";
+	    String sql2 = "INSERT INTO musicas_e_playlists(id_musica, id_playlist)"
+                + "VALUES(?,?)";
 	    try {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	        pstmt.setString(1, nome);
 	        pstmt.setString(2, path);
 	        pstmt.executeUpdate();
-
 	        System.out.println("Música criada com sucesso!");
+
+	        int musicaId = MusicaDAO.getMusicaId(nome, conn);
+	        int playlistId = PlaylistDAO.getPlaylistId("Músicas", 0, conn);
+	        pstmt.setInt(1, musicaId);
+	        pstmt.setInt(2, playlistId);
+	        pstmt.executeUpdate();
+	        System.out.println("Música adicionada ao banco de dados!");
+	        
 	    } catch (SQLException e) {
 	        System.out.println(e.getMessage());
 	    }
