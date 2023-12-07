@@ -1,7 +1,10 @@
 package com.spotify.control;
 import java.io.File;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
+
 import com.spotify.model.Musica;
 import javafx.application.Application;
 import javafx.scene.media.Media;
@@ -13,12 +16,14 @@ import javafx.util.Duration;
 //Fazer funcao de adicionar musica a fila
 //Fazer funcao de adicionar playlist a fila
 public class MusicPlayer extends Application {
-	private static Queue<Musica> fila = new LinkedList<Musica>();
+	private static Deque<Musica> fila = new LinkedList<Musica>();
+	private static Stack<Musica> jaTocadas = new Stack<Musica>();
+	
 	private static int isPlaying=0;
 	private static Duration pauseTime = Duration.ZERO;
 	
 	
-	public MediaPlayer currentPlayer =null;
+	public static MediaPlayer currentPlayer =null;
 	
 	public MusicPlayer() {
 		/*String q = "./storage/musicas/DreamTeamGanharDragoesNegros.mp3";
@@ -40,46 +45,61 @@ public class MusicPlayer extends Application {
 	
 	public void pausar() {
 		 if (currentPlayer != null && isPlaying ==1) {
-			    pauseTime = currentPlayer.getCurrentTime();
-			    currentPlayer.pause();
-			    System.out.println("Musica pausada em "+pauseTime.toMillis());
+		    pauseTime = currentPlayer.getCurrentTime();
+		    currentPlayer.pause();
+		    isPlaying=2;
+		    System.out.println("Musica pausada em "+pauseTime.toMillis());
 		 } 
 	}
 	
 	public void proximaMusica() {
-		
+		if(!fila.isEmpty()) {
+			jaTocadas.add(fila.remove());
+		}
+		pausar();
+    	isPlaying=0;
+    	tocar();
+    	
 	}
 	
 	public void musicaAnterior() {
-		
+		if(!jaTocadas.isEmpty()) {
+			fila.addFirst(jaTocadas.pop());
+		}
+		pausar();
+		isPlaying=0;
+		tocar();
+		return;
 	}
 	
 	public void playNextMusicFile(Queue<Musica> fila) {
 		  if (fila.isEmpty()) {
 			  return ;
 		  }
+		  if(isPlaying==1) {
+			  return ;
+		  }
 		 
 		  Musica nextMusic = fila.element();
 		  Media media = new Media(new File(nextMusic.getPath()).toURI().toString());
-
-		  
-		  
 		  if (currentPlayer == null || isPlaying == 0) {
 			    currentPlayer = new MediaPlayer(media);
-			    System.out.println("entrou aqui");
+			    //System.out.println("entrou aqui");
 			    currentPlayer.setOnEndOfMedia(() -> {
-			    	System.out.println("cabou");
+			    	
+			    	//System.out.println("cabou");
 				    currentPlayer.dispose();
 				    isPlaying = 0;
 				    pauseTime = Duration.ZERO;
+				    jaTocadas.add(nextMusic);
 				    fila.remove();
 				    playNextMusicFile(fila);
 			    });
 		  }
 
 		  isPlaying = 1;
-		  System.out.println("Resumindo a musica em "+pauseTime.toMillis());
-		  System.out.println(currentPlayer.getMedia());
+		  //System.out.println("Resumindo a musica em "+pauseTime.toMillis());
+		  //1System.out.println(currentPlayer.getMedia());
 		  currentPlayer.seek(pauseTime);
 		  currentPlayer.play();
 		}
@@ -94,11 +114,11 @@ public class MusicPlayer extends Application {
 		return INSTANCE;
 	}
 
-	public static Queue<Musica> getFila() {
+	public static Deque<Musica> getFila() {
 		return fila;
 	}
 
-	public static void  setFila(Queue<Musica> fila) {
+	public static void  setFila(Deque<Musica> fila) {
 		MusicPlayer.fila = fila;
 	}
 	

@@ -214,7 +214,7 @@ public class MenuController {
     }
 	@FXML
     void previousAction(ActionEvent event) {
-
+		player.musicaAnterior();
     }
     @FXML
     void pauseAction(ActionEvent event) {
@@ -224,11 +224,7 @@ public class MenuController {
 
     @FXML
     void nextAction(ActionEvent event) {
-    	MusicPlayer.getFila().remove();
-    	
-    	player.pausar();
-    	player.tocar();
-    	
+    	player.proximaMusica();
     }
 
     @FXML
