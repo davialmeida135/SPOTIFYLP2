@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.spotify.data.DataBase;
 import com.spotify.model.Musica;
@@ -13,13 +15,12 @@ import com.spotify.model.Musica;
 //Para adicionar, remover, modificar e tocar playlists
 public class PlaylistDAO {
 	
-	public static void novaPlaylist(String nome,String descricao,int userId,Connection conn) {
-        String sql = "INSERT INTO playlists(nome, descricao,proprietario_id) VALUES(?,?,?)";  
+	public static void novaPlaylist(String nome,int userId,Connection conn) {
+        String sql = "INSERT INTO playlists(nome, proprietario_id) VALUES(?,?)";  
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nome);
-            pstmt.setString(2, descricao);
-            pstmt.setInt(3, userId);
+            pstmt.setInt(2, userId);
             pstmt.executeUpdate();
             System.out.println("Playlist criada com sucesso!");
         } catch (SQLException e) {
@@ -63,7 +64,7 @@ public class PlaylistDAO {
         String sql = "INSERT INTO musicas_e_playlists(id_musica, id_playlist)"
                 + "VALUES(?,?)";
 
-        int musicaId = MusicaDAO.getMusicaId(nome, userId, conn);
+        int musicaId = MusicaDAO.getMusicaId(nome, conn);
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -119,9 +120,9 @@ public class PlaylistDAO {
     }
 	
     
-	//Retorna um array com todas as musicas de uma playlist
-	public static ArrayList<Musica> getMusicasPlaylist(int playlistId,Connection conn) throws SQLException{
-		ArrayList<Musica> musicas = new ArrayList<Musica>();
+	//Retorna uma fila com todas as musicas de uma playlist
+	public static Queue<Musica> getMusicasPlaylist(int playlistId,Connection conn) throws SQLException{
+		Queue<Musica> musicas = new LinkedList<Musica>();
 		//Musica novaMusica = new Musica();
 		String sql = "SELECT m.titulo, m.path "
                 + "FROM playlists p "
@@ -136,7 +137,7 @@ public class PlaylistDAO {
         	Musica novaMusica = new Musica();
             String title = rs.getString("titulo");
             String path = rs.getString("path");
-            novaMusica.setNome(title);
+            novaMusica.setTitulo(title);
         	novaMusica.setPath(path);
         	
         	musicas.add(novaMusica);

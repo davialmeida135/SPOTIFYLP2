@@ -2,21 +2,23 @@ package com.spotify.dao;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.spotify.data.Arquivos;
 import com.spotify.data.DataBase;
+import com.spotify.model.Musica;
 //Classe que utilizará os métodos fornecidos pela classe Database
 //Para adicionar, remover, modificar e tocar músicas
 public class MusicaDAO {
 	
 	//Adiciona uma musica à database
-	public static void novaMusica(String nome, String path,int userId ,Connection conn) {
+	public static void novaMusica(String nome, String path,Connection conn) {
 	    String sql = "INSERT INTO musicas (titulo, path) VALUES (?, ?)";
-
 	    try {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	        pstmt.setString(1, nome);
@@ -29,33 +31,22 @@ public class MusicaDAO {
 	    }
 	}
 	
-	//Adiciona todas as musicas de uma pasta à database
-	public static void novoDiretorio(String path,int userId, Connection conn) 
-		{ 
-	        File file = new File(path); 
-	  
-	        File[] files = file.listFiles(); 
-	        if (files == null) 
-	            return; 
-	  
-	        for (File f : files) { 
-	  
-	            if (f.isDirectory() && f.exists()) { 
-	                try { 
-	                	novoDiretorio(f.getPath(),userId,conn); 
-	                } 
-	                catch (Exception e) { 
-	                    e.printStackTrace(); 
-	                    continue; 
-	                } 
-	            } 
-	            else if (!f.isDirectory() && f.exists()) { 
-	                // using file filter 
-	                if (filter.accept(f)) {
-	                	novaMusica(f.getName(), f.getPath(), -1,conn) ;
-	                } 
-	            } 
-	        } 
+	//Adiciona diretório à database
+	public static void novoDiretorio(File file, Connection conn) { 
+		String sql = "INSERT INTO diretorios (path) VALUES (?)";
+		try {
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, file.getPath());
+	        pstmt.executeUpdate();
+
+	        System.out.println("Diretório adicionado com sucesso!");
+	        Arquivos.copyAllFiles(file, conn);
+	    } catch (SQLException e) {
+	        System.out.println(e.getMessage());
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static void removerMusica(String nome, Connection conn) {
@@ -72,7 +63,7 @@ public class MusicaDAO {
 	    }
 	}
 	
-	public static int getMusicaId(String nome, int userId, Connection conn) {
+	public static int getMusicaId(String nome, Connection conn) {
 	    String sql = "SELECT musicas.id FROM musicas WHERE musicas.titulo = ?";
 
 	    try {
@@ -95,30 +86,31 @@ public class MusicaDAO {
 
 	}
 	
-	public static String getMusicaPath(String nome, int userId,Connection conn) {
-		String path = null;
-		String sql = "SELECT musicas.path FROM musicas "
-				+ "WHERE musicas.titulo = ?";
-		
-		PreparedStatement pstmt;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, nome);
-			ResultSet rs = pstmt.executeQuery();
-			
-			if (rs.next()) {
-	            return rs.getString("path");
+	public static Musica getMusica(String nome, Connection conn) {
+		Musica musica = new Musica();
+	    String sql = "SELECT musicas.id,musicas.titulo,musicas.path FROM musicas WHERE musicas.titulo = ?";
+
+	    try {
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, nome);
+	        //pstmt.setInt(2, userId);
+
+	        ResultSet rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            musica.setId(rs.getInt("id"));
+	            musica.setTitulo(rs.getString("titulo"));
+	            musica.setPath(rs.getString("path"));
+	            return musica;
 	        } else {
 	            System.out.println("Música não encontrada.");
-	            return "";
+	            return null;
 	        }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        
-		return path;
+	    } catch (SQLException e) {
+	        System.out.println(e.getMessage());
+	        return null;
+	    }
+
 	}
 	
 	//Filtro de mp3 e wav
