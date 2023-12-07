@@ -283,4 +283,9 @@ public class MenuController {
     	MusicPlayer.limparFila();
     }
 	
+    @FXML
+    void refresh(ActionEvent event) {
+  
+    }
+
 }
