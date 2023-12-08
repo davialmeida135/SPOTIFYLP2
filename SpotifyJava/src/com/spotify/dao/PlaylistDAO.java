@@ -79,13 +79,15 @@ public class PlaylistDAO {
     }
 	
 	//Tirar musica da playlist
-    public static void removerMusica(int musicId, int playlistId, Connection conn) {
-        String sql = "DELETE FROM musicas_e_playlists "
-                + "WHERE id_musica=? AND id_playlist=?";
-
+    public static void removerMusica(String nome, int playlistId, Connection conn) {
+        String sql = "DELETE FROM musicas_e_playlists"
+        		+ " WHERE id_musica = ? AND id_playlist = ?";
+        
+        int musicaId = MusicaDAO.getMusicaId(nome, conn);
+        
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, musicId);
+            pstmt.setInt(1, musicaId);
             pstmt.setInt(2, playlistId);
             pstmt.executeUpdate();
 

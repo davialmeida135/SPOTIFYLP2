@@ -29,7 +29,7 @@ public class MusicaDAO {
 	        System.out.println("Música criada com sucesso!");
 
 	        int musicaId = MusicaDAO.getMusicaId(nome, conn);
-	        int playlistId = PlaylistDAO.getPlaylistId("Músicas", 0, conn);
+	        int playlistId = PlaylistDAO.getPlaylistId("Musicas", 0, conn);
 	        pstmt.setInt(1, musicaId);
 	        pstmt.setInt(2, playlistId);
 	        pstmt.executeUpdate();
@@ -120,6 +120,11 @@ public class MusicaDAO {
 	        return null;
 	    }
 
+	}
+	
+	public static Boolean estaNaPlaylist(){
+		return null;
+		
 	}
 	
 	//Filtro de mp3 e wav

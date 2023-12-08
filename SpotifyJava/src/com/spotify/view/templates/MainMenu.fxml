@@ -79,6 +79,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
+            <Label fx:id="errorHolder" alignment="CENTER" layoutX="630.0" layoutY="542.0" prefHeight="37.0" prefWidth="154.0" text="Seja bem vindo!" textAlignment="CENTER" textFill="#29ff0d" wrapText="true" />
             <Button layoutX="679.0" layoutY="315.0" mnemonicParsing="false" onAction="#adicionarMusicaFila" prefHeight="27.0" prefWidth="143.0" text="Adicionar musica à fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />
             <Button layoutX="679.0" layoutY="348.0" mnemonicParsing="false" onAction="#adicionarPlaylistFila" prefHeight="27.0" prefWidth="143.0" text="Adicionar playlist à fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />
             <Button layoutX="679.0" layoutY="383.0" mnemonicParsing="false" onAction="#limparFila" prefHeight="25.0" prefWidth="143.0" text="Limpar fila" textOverrun="WORD_ELLIPSIS" wrapText="true" />

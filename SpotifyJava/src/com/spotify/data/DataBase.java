@@ -74,9 +74,7 @@ public class DataBase {
 	        		+ "CREATE TABLE diretorios (\r\n"
 	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
 	        		+ "    path TEXT NOT NULL ,\r\n"
-	        		+ ");\r\n"
-	        		+ "INSERT INTO playlists(nome, descricao, proprietario)"
-	        		+ " VALUES(Músicas,Todas as músicas,0);";
+	        		+ ");\r\n";
 	          
 	        try{   
 	            Statement stmt = conn.createStatement();  

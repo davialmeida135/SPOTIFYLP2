@@ -18,10 +18,6 @@ Database SQLITE:
 TO-DO:
 - Criar tela de cadastro
 
-- Play tocar a música de onde ela pausou
-
-- Criar fila reversa para poder voltar musicas
-
 - Criar funcao que carrega todas as musicas dos diretórios na inicialização.
 
 - Evitar usuários não vip de criarem playlists
@@ -29,8 +25,6 @@ TO-DO:
 - BOTOES FALTANDO:
 	- Criar playlist
 	- Remover Playlist (menos a Músicas)
-	- Adicionar musica à uma playlist (menos a Músicas)
-	- Remover música da playlist selecionada (menos a Músicas)
 
 O QUE JA FUNCIONA:
 	- Login
@@ -39,6 +33,14 @@ O QUE JA FUNCIONA:
 	- Botão play e botão pause
 	- Botão de próxima música
 	- Log out
+	- Play tocar a música de onde ela pausou
+	- Criar fila reversa para poder voltar musicas
+	- Adicionar musica à uma playlist (menos a Músicas)
+	- Remover música da playlist selecionada (menos a Músicas)
 	
+ERROS CONHECIDOS:
+	- Ao remover uma música de uma playlist onde existem mais de uma
+	cópia desta música, todas as cópias são removidas da playlist.
+
 
 	
