@@ -59,44 +59,31 @@ public class LoginController {
 		user = new Usuario();
 		try {
 			nome = nomeTextField.getText();
-			usuario = usernameTextField.getText();
+			tipo = isVIP.isSelected() ? "VIP" : "COMUM";
+			usuario = usernameTextField1.getText();
 			senha = passwordTextField.getText();
-		
-			Connection conn = DataBase.connect("database.db");
-			autenticador = UsuarioDAO.autenticar(usuario, senha, conn);
 
-			//-1 = usuario nao encontrado
-			//-2 = senha incorreta
-			if(autenticador >= 0) {
-				myLabel.setText("You are now signed up!");
-				
-				//Funcao de receber uma instancia de usuario baseado no id
-				user = UsuarioDAO.getUsuario(autenticador, conn);
-				conn.close();
-				UserHolder holder = UserHolder.getInstance();
-				holder.setUser(user);
-				MenuView menu = new MenuView();
-				menu.start(stage);
+			Connection conn = DataBase.connect("database.db");
+
+			// Verifica se o nome de usuário já existe
+			int idUsuario = UsuarioDAO.getUsuarioId(usuario, conn);
+			if (idUsuario != -1) {
+				errorLabel.setText("Usuário já existe!");
+				return;
 			}
-			else if(autenticador ==-1){
-				errorLabel.setText("Usuário não encontrado");	
-			}
-			else if(autenticador == -2) {
-				errorLabel.setText("Senha incorreta");	
-			}
-			else {
-				errorLabel.setText("Erro não identificado");	
-			}
-		}
-		catch (NumberFormatException e){
-			myLabel.setText("enter only numbers plz");
-			
-		}
-		catch (Exception e) {
-			myLabel.setText("error");
-			System.out.println(e.toString());
+
+			// Insere o usuário no banco de dados
+			UsuarioDAO.inserirUsuario(nome, tipo, usuario, senha, conn);
+			conn.close();
+
+			// Mostra uma mensagem de sucesso
+			myLabel.setText("Você está cadastrado!");
+		} catch (Exception e) {
+			// Mostra uma mensagem de erro
+			errorLabel.setText("Erro ao cadastrar usuário");
 		}
 	}
+
 	
 	public void registerRedirect() {
 		stage = (Stage) registerLabel.getScene().getWindow();
