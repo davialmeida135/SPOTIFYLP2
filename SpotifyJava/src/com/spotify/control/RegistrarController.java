@@ -22,14 +22,14 @@ import com.spotify.model.Usuario;
 import com.spotify.dao.UsuarioDAO;
 
 
-public class LoginController {
+public class RegistrarController {
 	
 	private Stage stage;
 	private Scene scene;
 	private Usuario user;
 
 	@FXML
-	private AnchorPane LoginAnchorPane;
+	private AnchorPane RegisterAnchorPane;
 	
 	@FXML
     private TextField passwordTextField;
@@ -41,7 +41,7 @@ public class LoginController {
     private Label myLabel;
 
     @FXML
-    private Button logIn;
+    private Button registrar;
 
     @FXML
     private Label errorLabel;
@@ -49,12 +49,20 @@ public class LoginController {
     @FXML
     private TextField usernameTextField;
 	
+    @FXML
+    private TextField nomeTextField;
+
+    @FXML
+    private CheckBox isVIP;
+
+	String nome;
+	String tipo;
 	String usuario;
 	String senha;
 	
 	int autenticador;
 	
-	public void submitRegistro(ActionEvent event) throws Exception { //Ao ser apertado o botão login
+	public void submitRegistro(ActionEvent event) throws Exception { //Ao ser apertado o botão Registrar
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		user = new Usuario();
 		try {
@@ -66,14 +74,14 @@ public class LoginController {
 			Connection conn = DataBase.connect("database.db");
 
 			// Verifica se o nome de usuário já existe
-			int idUsuario = UsuarioDAO.getUsuarioId(usuario, conn);
+			int idUsuario = UsuarioDAO.getUserId(usuario, conn);
 			if (idUsuario != -1) {
 				errorLabel.setText("Usuário já existe!");
 				return;
 			}
 
 			// Insere o usuário no banco de dados
-			UsuarioDAO.inserirUsuario(nome, tipo, usuario, senha, conn);
+			UsuarioDAO.novoUsuario(nome, tipo, usuario, senha, conn);
 			conn.close();
 
 			// Mostra uma mensagem de sucesso
