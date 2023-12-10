@@ -7,6 +7,10 @@ import java.util.Stack;
 
 import com.spotify.model.Musica;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -16,24 +20,56 @@ import javafx.util.Duration;
 //Fazer funcao de adicionar musica a fila
 //Fazer funcao de adicionar playlist a fila
 public class MusicPlayer extends Application {
+	
 	private static Deque<Musica> fila = new LinkedList<Musica>();
 	private static Stack<Musica> jaTocadas = new Stack<Musica>();
 	
 	private static int isPlaying=0;
 	private static Duration pauseTime = Duration.ZERO;
 	
+	private static UserHolder holder = UserHolder.getInstance();
 	
-	public static MediaPlayer currentPlayer =null;
-	
-	public MusicPlayer() {
-		/*String q = "./storage/musicas/DreamTeamGanharDragoesNegros.mp3";
-		String w = "./storage/musicas/hapi_-_vou_quebrar_tudo.mp3";
-		Musica qm = new Musica("muriz",q);
-		Musica wm = new Musica("hapi",w);
-		fila.add(qm);
-		fila.add(wm);*/
-		
+	public static Duration getPauseTime() {
+		return pauseTime;
 	}
+
+	public static void setPauseTime(Duration pauseTime) {
+		MusicPlayer.pauseTime = pauseTime;
+	}
+
+	private static MediaPlayer currentPlayer =new MediaPlayer(new Media(new File("./storage/musicas/Arquivo.mp3").toURI().toString()));
+	
+
+	public MusicPlayer() {
+		if(MusicPlayer.currentPlayer!=null) {
+			MusicPlayer.currentPlayer.currentTimeProperty().addListener(new InvalidationListener() 
+	        {
+	            public void invalidated(Observable ov) {
+	            	System.out.println("oi");
+					/*double tempoTotal = MusicPlayer.currentPlayer.getStopTime().toSeconds();
+					double jump = 100000/tempoTotal;
+					System.out.println("hello");
+				    timeSlider.setValue(MusicPlayer.currentPlayer.getCurrentTime().toMillis()*jump);*/
+	            }
+	        });
+		}
+		}
+		/**/
+		/*currentPlayer.currentTimeProperty().addListener(new InvalidationListener(){
+			@Override
+			public void invalidated(Observable arg0) {
+				// TODO Auto-generated method stub
+				
+				if(MusicPlayer.currentPlayer!=null) {
+					System.out.print("nao é nulo\n");
+					System.out.println(currentPlayer.getCurrentTime());
+					//MusicPlayer.currentPlayer.setVolume(volumeSlider.getValue()/100);
+				}
+				System.out.print("é nulo\n");
+			}
+		});*/
+		
+	
 	
 	private final static MusicPlayer INSTANCE = new MusicPlayer();
 	
@@ -83,7 +119,7 @@ public class MusicPlayer extends Application {
 		  Musica nextMusic = fila.element();
 		  Media media = new Media(new File(nextMusic.getPath()).toURI().toString());
 		  if (currentPlayer == null || isPlaying == 0) {
-			    currentPlayer = new MediaPlayer(media);
+			  setCurrentPlayer(new MediaPlayer(media));
 			    //System.out.println("entrou aqui");
 			    currentPlayer.setOnEndOfMedia(() -> {
 			    	
@@ -98,8 +134,7 @@ public class MusicPlayer extends Application {
 		  }
 
 		  isPlaying = 1;
-		  //System.out.println("Resumindo a musica em "+pauseTime.toMillis());
-		  //1System.out.println(currentPlayer.getMedia());
+		
 		  currentPlayer.seek(pauseTime);
 		  currentPlayer.play();
 		}
@@ -126,6 +161,25 @@ public class MusicPlayer extends Application {
 		fila.clear();
 		
 	}
-	
-	
+	public static ChangeListener<Duration> changeListener = new ChangeListener<Duration>() {
+		@Override
+		public void changed(ObservableValue<? extends Duration> arg0, Duration arg1, Duration arg2) {
+			double tempoTotal = currentPlayer.getStopTime().toSeconds();
+			double jump = 100000/tempoTotal;
+			holder.getTimeSlider().setValue(currentPlayer.getCurrentTime().toSeconds()*jump);
+			
+		}
+	};
+	public void setCurrentPlayer(MediaPlayer player) {
+	    if (currentPlayer != null) {
+	    	currentPlayer.currentTimeProperty().removeListener(changeListener);
+	    }
+	    currentPlayer = player;
+	    if (currentPlayer != null) {
+	    	currentPlayer.currentTimeProperty().addListener(changeListener);
+	    }
+	}
+	public static MediaPlayer getCurrentPlayer() {
+			return currentPlayer;
+		}
 }

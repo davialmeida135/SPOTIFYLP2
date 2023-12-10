@@ -21,7 +21,6 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="116.0" layoutY="470.0" stroke="BLACK" strokeType="INSIDE" width="832.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5671" height="339.0" layoutX="362.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="270.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b5770" height="339.0" layoutX="28.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="270.0" />
-            <ProgressBar layoutX="229.0" layoutY="525.0" prefHeight="18.0" prefWidth="327.0" progress="0.0" />
             <Button layoutX="679.0" layoutY="422.0" mnemonicParsing="false" onAction="#logOut" prefHeight="25.0" prefWidth="143.0" text="Log out">
       		         <font>
       		            <Font size="16.0" />
@@ -50,11 +49,6 @@
             <Button layoutX="361.0" layoutY="393.0" mnemonicParsing="false" onAction="#adicionarParaPlaylist" prefHeight="25.0" prefWidth="120.0" text="Adicionar à playlist:" />
             <TextField fx:id="addToPlaylistField" layoutX="489.0" layoutY="393.0" prefHeight="25.0" prefWidth="143.0" />
             <Button layoutX="362.0" layoutY="434.0" mnemonicParsing="false" onAction="#removerDaPlaylist" prefHeight="25.0" prefWidth="270.0" text="Remover da playlist atual" />
-            <Text layoutX="255.0" layoutY="561.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Música tocando agora" wrappingWidth="274.13671875">
-               <font>
-                  <Font name="Constantia Bold" size="14.0" />
-               </font>
-            </Text>
             <Accordion layoutX="637.0" layoutY="58.0" />
             <ImageView fitHeight="160.0" fitWidth="160.0" layoutX="670.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -100,6 +94,12 @@
                   <Image url="@../img/volume.png" />
                </image>
             </ImageView>
+            <Label fx:id="musicaTocando" alignment="CENTER" layoutX="273.0" layoutY="542.0" prefHeight="37.0" prefWidth="214.0" text="Now playing" textAlignment="CENTER" textFill="#141414" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Slider fx:id="timeSlider" layoutX="237.0" layoutY="527.0" max="100000.0" prefHeight="14.0" prefWidth="317.0" value="50000.0" />
       </children>
     </AnchorPane>
   </children>

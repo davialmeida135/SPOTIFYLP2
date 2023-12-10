@@ -3,6 +3,9 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.stream.Stream;
 
 import com.spotify.dao.MusicaDAO;
@@ -87,6 +90,29 @@ public class Arquivos {
             } 
 	    } 
 	 } 
+	 
+	 public static void inicializarDiretorios(Connection conn){
+		String sql = "SELECT path FROM diretorios";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				copyAllFiles(new File(rs.getString("path")),conn);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    
+
+        
+
+		 
+	 }
 	 
 	 //Filtro de apenas arquivos mp3 e wav
 	 static FileFilter filter = new FileFilter() { 

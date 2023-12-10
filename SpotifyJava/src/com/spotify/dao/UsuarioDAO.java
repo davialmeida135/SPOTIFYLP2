@@ -60,7 +60,7 @@ public class UsuarioDAO {
 			stmt.setString(1, usuario);
 			stmt.executeUpdate();
 			
-			PlaylistDAO.removerPlaylistsUsuario(userId,conn);
+			//PlaylistDAO.removerPlaylistsUsuario(userId,conn);
 			
 		}catch (SQLException e) {  
             System.out.println(e.getMessage());  
@@ -75,7 +75,7 @@ public class UsuarioDAO {
 			PreparedStatement stmt = conn.prepareStatement(sql);  
 			stmt.setInt(1, userId);
 			stmt.executeUpdate();
-			PlaylistDAO.removerPlaylistsUsuario(userId,conn);
+			//PlaylistDAO.removerPlaylistsUsuario(userId,conn);
 			
 		}catch (SQLException e) {  
             System.out.println(e.getMessage());  

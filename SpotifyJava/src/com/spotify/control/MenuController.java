@@ -17,6 +17,9 @@ import com.spotify.data.DataBase;
 import com.spotify.model.Musica;
 import com.spotify.model.Usuario;
 import com.spotify.view.LoginView;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -34,8 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-
+import javafx.util.Duration;
 
 public class MenuController {
     @FXML
@@ -64,12 +66,17 @@ public class MenuController {
     private TextField novaPlaylistField;
     @FXML
     private TextField removerPlaylistField;
+    @FXML
+    public Label musicaTocando;
+    @FXML
+    private Slider timeSlider;
     
     Connection conn = DataBase.connect("database.db");
     
     UserHolder holder=UserHolder.getInstance();
     Usuario loggedUser=holder.getUser();
 
+    
     Stage stage = holder.getStage();
     
     MusicPlayer player = MusicPlayer.getInstance();
@@ -112,10 +119,8 @@ public class MenuController {
         botaoImportarMusica.setOnAction(importarMusica);
         botaoImportarDiretorio.setOnAction(importarDiretorio);
     }
-    
-    
-    
-	
+
+
 	@FXML
 	public void logOut(ActionEvent event) throws Exception {
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -129,7 +134,7 @@ public class MenuController {
 	public void initialize() throws SQLException {
 		
 		System.out.println("Inicializou");
-		
+		holder.setTimeSlider(timeSlider);
 		nameHolder.setText(loggedUser.getNome());
 		usernameHolder.setText(loggedUser.getUsuario());
 		typeHolder.setText(loggedUser.getTipo());
@@ -143,7 +148,39 @@ public class MenuController {
 				 loadMusicas(conn);
 			    }
 		});
+		volumeSlider.setValue(50);
+		volumeSlider.valueProperty().addListener(new InvalidationListener(){
+			@Override
+			public void invalidated(Observable arg0) {
+				// TODO Auto-generated method stub
+				if(MusicPlayer.getCurrentPlayer()!=null) {
+					MusicPlayer.getCurrentPlayer().setVolume(volumeSlider.getValue()/100);
+				}
+				
+			}
+		});
+		timeSlider.valueProperty().addListener(new InvalidationListener(){
+			@Override
+			public void invalidated(Observable arg0) {
+				if(MusicPlayer.getCurrentPlayer()!=null) {
+					double tempoTotal = MusicPlayer.getCurrentPlayer().getStopTime().toSeconds();
+					double jump = 100000/tempoTotal;
+					if(Math.round((timeSlider.getValue()/jump) * 1000)!=Math.round(MusicPlayer.getCurrentPlayer().getCurrentTime().toMillis())) {
+						System.out.println("foi movido");
+						Duration seek = new Duration((timeSlider.getValue()/jump) * 1000 );
+						MusicPlayer.getCurrentPlayer().seek(seek);
+						MusicPlayer.setPauseTime(seek);
+					}/*
+					*/
+					
+				}
+				
+			}
+		});
 		
+	
+
+
 		System.out.println(loggedUser.getNome());
 		
 	}
@@ -151,7 +188,7 @@ public class MenuController {
 	public void loadPlaylists(int userId,Connection conn) {
 		//System.out.println("NUMERO UM");
 		String sql = "SELECT playlists.nome FROM playlists WHERE proprietario_id = ?";
-		listaMusicas.getItems().clear();
+		ListaPlaylists.getItems().clear();
 		ListaPlaylists.getItems().add("Musicas");
 		if(loggedUser.getTipo().equals("VIP")) {
 			System.out.println("É um vip, procurando playlists");
@@ -182,6 +219,9 @@ public class MenuController {
 		
 		String nomePlaylist = ListaPlaylists.getSelectionModel().getSelectedItem();
 		int id = loggedUser.getId();
+		if(nomePlaylist==null) {
+			return;
+		}
 		if(nomePlaylist.equals("Musicas"))
 			id=0;
 		
@@ -228,12 +268,41 @@ public class MenuController {
 
     @FXML
     void criarPlaylist(ActionEvent event) {
-    	
+    	String nomeNovaPlaylist = novaPlaylistField.getText();
+    	if(nomeNovaPlaylist.equals("Musicas")) {
+    		errorHolder.setTextFill(Color.color(1, 0, 0));
+    		errorHolder.setText("Não é possível criar uma playlist com este nome");
+    		return;
+    	}
+    	int busca = PlaylistDAO.getPlaylistId(nomeNovaPlaylist, loggedUser.getId(), conn);
+    	if(busca ==-1) {
+    		PlaylistDAO.novaPlaylist(nomeNovaPlaylist, loggedUser.getId(), conn);
+    		errorHolder.setTextFill(Color.color(0, 1, 0));
+    		errorHolder.setText("Nova playlist criada com sucesso!");	
+    		return;
+    	}
+    	errorHolder.setTextFill(Color.color(1, 0, 0));
+		errorHolder.setText("Não é possível criar uma playlist");
+    	return;
     }
 
     @FXML
     void removerPlaylist(ActionEvent event) {
-
+    	String nomeRemoverPlaylist = removerPlaylistField.getText();
+    	if(nomeRemoverPlaylist.equals("Musicas")) {
+    		errorHolder.setTextFill(Color.color(1, 0, 0));
+    		errorHolder.setText("Não é possível remover esta playlist");
+    		return;
+    	}
+    	int busca = PlaylistDAO.getPlaylistId(nomeRemoverPlaylist, loggedUser.getId(), conn);
+    	if(busca >=0) {
+    		
+    		PlaylistDAO.removerPlaylist(nomeRemoverPlaylist, loggedUser.getId(), conn);
+    		
+    		errorHolder.setTextFill(Color.color(0, 1, 0));
+    		errorHolder.setText("Playlist removida com sucesso!");	
+    		return;
+    	}
     }
 
     @FXML
@@ -299,7 +368,11 @@ public class MenuController {
     void adicionarPlaylistFila(ActionEvent event) {
     	String playlist = ListaPlaylists.getSelectionModel().getSelectedItem();
     	int id = PlaylistDAO.getPlaylistId(playlist, loggedUser.getId(), conn);
+    	if(playlist.equals("Musicas")) {
+    			id = PlaylistDAO.getPlaylistId("Musicas", 0, conn);
+    	}
     	try {
+    		
     		Queue<Musica> musicasPlaylist = PlaylistDAO.getMusicasPlaylist(id, conn);
     		MusicPlayer.getFila().addAll(musicasPlaylist);
     	} catch (SQLException e) {
@@ -315,13 +388,8 @@ public class MenuController {
 	
     @FXML
     void refresh(ActionEvent event) {
-    	String playlist = ListaPlaylists.getSelectionModel().getSelectedItem();
-    	if(playlist.equals("Musicas")) {
-        	loadMusicas(conn);
-        }
-        else {
-        	loadMusicas(conn);
-        }
+        loadMusicas(conn);
+        loadPlaylists(loggedUser.getId(),conn);     
     }
 
 }

@@ -1,12 +1,14 @@
 package com.spotify.control;
 import com.spotify.model.Usuario;
 
+import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
 public final class UserHolder {
 	  
 	  private Usuario user;
 	  private Stage stage;
+	  private Slider timeSlider;
 	  private final static UserHolder INSTANCE = new UserHolder();
 	  
 	  private UserHolder() {}
@@ -30,6 +32,14 @@ public final class UserHolder {
 	 public void setStage(Stage stage) {
 	 	this.stage = stage;
 	 }
+
+	public Slider getTimeSlider() {
+		return timeSlider;
+	}
+
+	public void setTimeSlider(Slider timeSlider) {
+		this.timeSlider = timeSlider;
+	}
 	  
 	  
 	}

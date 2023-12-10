@@ -44,16 +44,16 @@ public class PlaylistDAO {
         }
     }
     
-	//Remove todas as playlists de um usuário
-    public static void removerPlaylistsUsuario(int userId, Connection conn) {
-        String sql = "DELETE FROM playlists WHERE proprietario_id = ?";
+	//Remove todas as musicas de uma playlist
+    public static void removerMusicasPlaylist(int id_playlist, Connection conn) {
+        String sql = "DELETE FROM musicas_e_playlists WHERE id_playlist = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, userId);
+            pstmt.setInt(1, id_playlist);
             pstmt.executeUpdate();
 
-            System.out.println("Playlists do usuário removidas com sucesso!");
+            System.out.println("Todas as musicas foram removidas da playlist!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
