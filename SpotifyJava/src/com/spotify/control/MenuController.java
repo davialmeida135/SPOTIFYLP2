@@ -249,7 +249,7 @@ public class MenuController {
     @FXML
     void adicionarParaPlaylist(ActionEvent event) {
     	String nomePlaylist=addToPlaylistField.getText();
-    	if(nomePlaylist.equals("Músicas")) {
+    	if(nomePlaylist.equals("Musicas")) {
     		errorHolder.setTextFill(Color.color(1, 0, 0));
     		errorHolder.setText("Não é possível adicionar músicas à esta playlist");
     		return;
@@ -269,7 +269,7 @@ public class MenuController {
     @FXML
     void removerDaPlaylist(ActionEvent event) {
     	String nomePlaylist=ListaPlaylists.getSelectionModel().getSelectedItem();
-    	if(nomePlaylist.equals("Músicas")) {
+    	if(nomePlaylist.equals("Musicas")) {
     		errorHolder.setTextFill(Color.color(1, 0, 0));
     		errorHolder.setText("Não é possível remover músicas desta playlist");
     		return;

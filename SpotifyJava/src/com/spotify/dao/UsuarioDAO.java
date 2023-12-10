@@ -28,7 +28,7 @@ public class UsuarioDAO {
         } 
 	}
 	
-	public static int getUserId(String usuario,Connection conn) {
+	public static int getUsuarioId(String usuario,Connection conn) {
 		String sql = "SELECT usuarios.id\r\n"
 		  		+ "FROM usuarios\r\n"
 		  		+ "WHERE usuarios.username = ?;";
@@ -55,7 +55,7 @@ public class UsuarioDAO {
 		String sql = "DELETE FROM usuarios WHERE username = ?";
 		try {
 			//Connection conn = DataBase.connect("database.db");
-			int userId = getUserId(usuario,conn);
+			int userId = getUsuarioId(usuario,conn);
 			PreparedStatement stmt = conn.prepareStatement(sql);  
 			stmt.setString(1, usuario);
 			stmt.executeUpdate();

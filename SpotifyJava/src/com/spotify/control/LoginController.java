@@ -99,6 +99,13 @@ public class LoginController {
 	
 	public void registerRedirect() {
 		stage = (Stage) registerLabel.getScene().getWindow();
+		RegistrarView registro = new RegistrarView();
+		try {
+			registro.start(stage);
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
 		System.out.println("oii");
 		
 		
