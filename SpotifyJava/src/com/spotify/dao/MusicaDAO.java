@@ -30,6 +30,7 @@ public class MusicaDAO {
 
 	        int musicaId = MusicaDAO.getMusicaId(nome, conn);
 	        int playlistId = PlaylistDAO.getPlaylistId("Musicas", 0, conn);
+	        pstmt = conn.prepareStatement(sql2);
 	        pstmt.setInt(1, musicaId);
 	        pstmt.setInt(2, playlistId);
 	        pstmt.executeUpdate();

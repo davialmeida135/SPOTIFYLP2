@@ -33,6 +33,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -121,15 +123,7 @@ public class MenuController {
     }
 
 
-	@FXML
-	public void logOut(ActionEvent event) throws Exception {
-		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		MusicPlayer.limparFila();
-		player.pausar();
-		LoginView login = new LoginView();
-		conn.close();
-		login.start(stage);
-	}
+	
 	
 	public void initialize() throws SQLException {
 		
@@ -155,8 +149,7 @@ public class MenuController {
 				// TODO Auto-generated method stub
 				if(MusicPlayer.getCurrentPlayer()!=null) {
 					MusicPlayer.getCurrentPlayer().setVolume(volumeSlider.getValue()/100);
-				}
-				
+				}	
 			}
 		});
 		timeSlider.valueProperty().addListener(new InvalidationListener(){
@@ -170,19 +163,22 @@ public class MenuController {
 						Duration seek = new Duration((timeSlider.getValue()/jump) * 1000 );
 						MusicPlayer.getCurrentPlayer().seek(seek);
 						MusicPlayer.setPauseTime(seek);
-					}/*
-					*/
-					
-				}
-				
+					}	
+				}	
 			}
 		});
-		
+	}
 	
-
-
-		System.out.println(loggedUser.getNome());
-		
+	@FXML
+	public void logOut(ActionEvent event) throws Exception {
+		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		MusicPlayer.limparFila();
+		MusicPlayer.getCurrentPlayer().stop();
+		MusicPlayer.setIsPlaying(0);
+		player.setCurrentPlayer(new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString())));
+		LoginView login = new LoginView();
+		conn.close();
+		login.start(stage);
 	}
 	
 	public void loadPlaylists(int userId,Connection conn) {

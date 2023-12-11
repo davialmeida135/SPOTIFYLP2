@@ -25,6 +25,15 @@ public class MusicPlayer extends Application {
 	private static Stack<Musica> jaTocadas = new Stack<Musica>();
 	
 	private static int isPlaying=0;
+	
+	public static int getIsPlaying() {
+		return isPlaying;
+	}
+
+	public static void setIsPlaying(int isPlaying) {
+		MusicPlayer.isPlaying = isPlaying;
+	}
+
 	private static Duration pauseTime = Duration.ZERO;
 	
 	private static UserHolder holder = UserHolder.getInstance();
@@ -37,38 +46,7 @@ public class MusicPlayer extends Application {
 		MusicPlayer.pauseTime = pauseTime;
 	}
 
-	private static MediaPlayer currentPlayer =new MediaPlayer(new Media(new File("./storage/musicas/Arquivo.mp3").toURI().toString()));
-	
-
-	public MusicPlayer() {
-		if(MusicPlayer.currentPlayer!=null) {
-			MusicPlayer.currentPlayer.currentTimeProperty().addListener(new InvalidationListener() 
-	        {
-	            public void invalidated(Observable ov) {
-	            	System.out.println("oi");
-					/*double tempoTotal = MusicPlayer.currentPlayer.getStopTime().toSeconds();
-					double jump = 100000/tempoTotal;
-					System.out.println("hello");
-				    timeSlider.setValue(MusicPlayer.currentPlayer.getCurrentTime().toMillis()*jump);*/
-	            }
-	        });
-		}
-		}
-		/**/
-		/*currentPlayer.currentTimeProperty().addListener(new InvalidationListener(){
-			@Override
-			public void invalidated(Observable arg0) {
-				// TODO Auto-generated method stub
-				
-				if(MusicPlayer.currentPlayer!=null) {
-					System.out.print("nao é nulo\n");
-					System.out.println(currentPlayer.getCurrentTime());
-					//MusicPlayer.currentPlayer.setVolume(volumeSlider.getValue()/100);
-				}
-				System.out.print("é nulo\n");
-			}
-		});*/
-		
+	private static MediaPlayer currentPlayer =new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString()));
 	
 	
 	private final static MusicPlayer INSTANCE = new MusicPlayer();
