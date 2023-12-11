@@ -13,12 +13,13 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		  try {
 				Connection conn = DataBase.connect("database.db");
-				Arquivos.inicializarDiretorios(conn);
+				//Arquivos.inicializarDiretorios(conn);
+				DataBase.criarTabela(conn);
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		  LoginView.play_login(args);	  
+		  //LoginView.play_login(args);	  
 	}
 		  
 }

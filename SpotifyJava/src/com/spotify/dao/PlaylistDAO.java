@@ -131,10 +131,10 @@ public class PlaylistDAO {
                 + "JOIN musicas_e_playlists mep ON p.id = mep.id_playlist "
                 + "JOIN musicas m ON mep.id_musica = m.id "
                 + "WHERE p.id = '" + playlistId + "'";
+		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 
-		int i = 0;
         while (rs.next()) {
         	Musica novaMusica = new Musica();
             String title = rs.getString("titulo");
@@ -143,12 +143,6 @@ public class PlaylistDAO {
         	novaMusica.setPath(path);
         	
         	musicas.add(novaMusica);
-        	//System.out.println(novaMusica.getNome()+novaMusica.getPath());
-        	
-
-            System.out.println("Title: " + title);
-            System.out.println("Path: " + path);
-            System.out.println("------------------------");
         }
 		return musicas;
 	}

@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.spotify.dao.PlaylistDAO;
+
 public class DataBase {
 	 public static Connection connect(String fileName){ //Inicia conexao com uma database
 	        Connection conn = null;  
@@ -78,7 +80,8 @@ public class DataBase {
 	          
 	        try{   
 	            Statement stmt = conn.createStatement();  
-	            stmt.execute(sql);  
+	            stmt.execute(sql);
+	            PlaylistDAO.novaPlaylist("Musicas", 0, conn);
 	        } catch (SQLException e) {  
 	            System.out.println(e.getMessage());  
 	        }  
@@ -89,9 +92,11 @@ public class DataBase {
 	        // SQLite connection string 
 	          
 	        // SQL statement for creating a new table  
-	        String sql ="CREATE TABLE diretorios (\r\n"
-	        		+ "    id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n"
-	        		+ "    path TEXT NOT NULL ,\r\n"
+	        String sql ="CREATE TABLE musicas_e_playlists (\r\n"
+	        		+ "    id_musica INTEGER NOT NULL,\r\n"
+	        		+ "    id_playlist INTEGER NOT NULL,\r\n"
+	        		+ "    FOREIGN KEY (id_musica) REFERENCES musicas (id),\r\n"
+	        		+ "    FOREIGN KEY (id_playlist) REFERENCES playlists (id)\r\n"
 	        		+ ");\r\n";
 	          
 	        try{   

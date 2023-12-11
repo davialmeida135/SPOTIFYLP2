@@ -265,6 +265,11 @@ public class MenuController {
     @FXML
     void criarPlaylist(ActionEvent event) {
     	String nomeNovaPlaylist = novaPlaylistField.getText();
+    	if(!loggedUser.getTipo().equals("VIP")) {
+    		errorHolder.setTextFill(Color.color(1, 0, 0));
+    		errorHolder.setText("Apenas VIPs podem criar playlists.");
+    		return;
+    	}
     	if(nomeNovaPlaylist.equals("Musicas")) {
     		errorHolder.setTextFill(Color.color(1, 0, 0));
     		errorHolder.setText("Não é possível criar uma playlist com este nome");
