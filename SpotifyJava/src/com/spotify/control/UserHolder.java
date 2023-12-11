@@ -11,6 +11,7 @@ public final class UserHolder {
 	  private Stage stage;
 	  private Slider timeSlider;
 	  private Label musicaTocando;
+	  private double volume;
 	  private final static UserHolder INSTANCE = new UserHolder();
 	  
 	  private UserHolder() {}
@@ -49,6 +50,14 @@ public final class UserHolder {
 
 	public void setMusicaTocando(Label musicaTocando) {
 		this.musicaTocando = musicaTocando;
+	}
+
+	public double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(double volume) {
+		this.volume = volume;
 	}
 	  
 	  

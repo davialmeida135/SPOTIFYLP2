@@ -145,12 +145,14 @@ public class MenuController {
 			    }
 		});
 		volumeSlider.setValue(50);
+		holder.setVolume(volumeSlider.getValue());
 		volumeSlider.valueProperty().addListener(new InvalidationListener(){
 			@Override
 			public void invalidated(Observable arg0) {
 				// TODO Auto-generated method stub
 				if(MusicPlayer.getCurrentPlayer()!=null) {
 					MusicPlayer.getCurrentPlayer().setVolume(volumeSlider.getValue()/100);
+					holder.setVolume(volumeSlider.getValue());
 				}	
 			}
 		});
@@ -160,7 +162,7 @@ public class MenuController {
 				if(MusicPlayer.getCurrentPlayer()!=null) {
 					double tempoTotal = MusicPlayer.getCurrentPlayer().getStopTime().toSeconds();
 					double jump = 100000/tempoTotal;
-					if(Math.round((timeSlider.getValue()/jump) * 1000)!=Math.round(MusicPlayer.getCurrentPlayer().getCurrentTime().toMillis())) {
+					if(Math.round((timeSlider.getValue()/jump))!=Math.round(MusicPlayer.getCurrentPlayer().getCurrentTime().toSeconds())) {
 						System.out.println("foi movido");
 						Duration seek = new Duration((timeSlider.getValue()/jump) * 1000 );
 						MusicPlayer.getCurrentPlayer().seek(seek);
@@ -175,6 +177,7 @@ public class MenuController {
 	public void logOut(ActionEvent event) throws Exception {
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		MusicPlayer.limparFila();
+		player.proximaMusica();
 		MusicPlayer.getCurrentPlayer().stop();
 		MusicPlayer.setIsPlaying(0);
 		player.setCurrentPlayer(new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString())));

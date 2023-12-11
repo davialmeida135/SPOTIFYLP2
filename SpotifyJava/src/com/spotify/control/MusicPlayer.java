@@ -98,15 +98,16 @@ public class MusicPlayer extends Application {
 		  Media media = new Media(new File(nextMusic.getPath()).toURI().toString());
 		  if (currentPlayer == null || isPlaying == 0) {
 			  setCurrentPlayer(new MediaPlayer(media));
+			  currentPlayer.setVolume(holder.getVolume());
 			    //System.out.println("entrou aqui");
-			    currentPlayer.setOnEndOfMedia(() -> {
-			    	
+			    currentPlayer.setOnEndOfMedia(() -> {	    	
 			    	//System.out.println("cabou");
 				    currentPlayer.dispose();
 				    isPlaying = 0;
 				    pauseTime = Duration.ZERO;
 				    jaTocadas.add(nextMusic);
 				    fila.remove();
+				    
 				    playNextMusicFile(fila);
 			    });
 		  }
@@ -137,7 +138,9 @@ public class MusicPlayer extends Application {
 	}
 	
 	public static void limparFila() {
+		Musica first = fila.element();
 		fila.clear();
+		fila.add(first);
 		
 	}
 	public static ChangeListener<Duration> changeListener = new ChangeListener<Duration>() {
