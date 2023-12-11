@@ -30,23 +30,17 @@ public class Arquivos {
 		         
 	        if (file == null) 
 	            return; 
-	        
-	  
-	            
+   
 	        if (file.exists()) { 
 	            // using file filter 
 	            if (filter.accept(file)) {
 	            	String filename = file.getName().substring(0,file.getName().length()-4);
 	                System.out.println(filename);
 	                
-	                
-	                
 	                Path destinoPath = Paths.get(destino+"/"+file.getName());
 	                Path filePath = Paths.get(file.getPath());
 	                Files.copy(filePath,destinoPath,StandardCopyOption.REPLACE_EXISTING);
-	                MusicaDAO.novaMusica(filename, destino+"/"+file.getName(), conn);
-	                
-	                
+	                MusicaDAO.novaMusica(filename, destino+"/"+file.getName(), conn);  
 	                
 	            } 
 	        } 

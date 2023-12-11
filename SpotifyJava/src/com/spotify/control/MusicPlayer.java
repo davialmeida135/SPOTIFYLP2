@@ -110,6 +110,7 @@ public class MusicPlayer extends Application {
 				    playNextMusicFile(fila);
 			    });
 		  }
+		  holder.getMusicaTocando().setText(nextMusic.getTitulo());
 
 		  isPlaying = 1;
 		

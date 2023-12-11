@@ -81,6 +81,7 @@ public class MenuController {
     
     Stage stage = holder.getStage();
     
+    
     MusicPlayer player = MusicPlayer.getInstance();
     
     private void configMenuButton(Connection conn) {
@@ -129,6 +130,7 @@ public class MenuController {
 		
 		System.out.println("Inicializou");
 		holder.setTimeSlider(timeSlider);
+		holder.setMusicaTocando(musicaTocando);
 		nameHolder.setText(loggedUser.getNome());
 		usernameHolder.setText(loggedUser.getUsuario());
 		typeHolder.setText(loggedUser.getTipo());
