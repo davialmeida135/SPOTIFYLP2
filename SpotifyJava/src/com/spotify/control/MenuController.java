@@ -73,254 +73,374 @@ public class MenuController {
     @FXML
     private Slider timeSlider;
     
+    // Conexão com o banco de dados
     Connection conn = DataBase.connect("database.db");
-    
-    UserHolder holder=UserHolder.getInstance();
-    Usuario loggedUser=holder.getUser();
 
-    
+    // Usuário logado
+    UserHolder holder = UserHolder.getInstance();
+    Usuario loggedUser = holder.getUser();
+
+    // Stage da aplicação
     Stage stage = holder.getStage();
-    
-    
+
+    // Instância do reprodutor de música
     MusicPlayer player = MusicPlayer.getInstance();
     
+    /**
+     * Configura o menu de importação de arquivos e diretórios.
+     *
+     * @param conn Conexão com o banco de dados.
+     */
     private void configMenuButton(Connection conn) {
-    	MenuItem botaoImportarMusica = new MenuItem("Música");
-    	MenuItem botaoImportarDiretorio = new MenuItem("Diretório");
-    	importBotao.getItems().clear();
-    	importBotao.getItems().add(botaoImportarMusica);
-    	importBotao.getItems().add(botaoImportarDiretorio);
-    	
-    	EventHandler<ActionEvent> importarMusica = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e)
-            {
-        		
-            	FileChooser fileChooser = new FileChooser();
-            	fileChooser.setTitle("Escolha um arquivo .mp3 ou .wav");
-            	File file = fileChooser.showOpenDialog(stage);
-            	try {
-					Arquivos.copyFile(file, conn);
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
-            	System.out.println(file.getName());
-                
+        MenuItem botaoImportarMusica = new MenuItem("Música");
+        MenuItem botaoImportarDiretorio = new MenuItem("Diretório");
+
+        // Limpa o menu de opções existentes
+        importBotao.getItems().clear();
+
+        // Adiciona as opções de importação de música e diretório
+        importBotao.getItems().add(botaoImportarMusica);
+        importBotao.getItems().add(botaoImportarDiretorio);
+
+        // Define os eventos de clique para as opções
+        botaoImportarMusica.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // Abre o FileChooser para selecionar um arquivo de música
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Escolha um arquivo .mp3 ou .wav");
+                File file = fileChooser.showOpenDialog(stage);
+
+                // Verifica se o usuário selecionou um arquivo
+                if (file != null) {
+                    try {
+                        // Copia o arquivo de música para a pasta de armazenamento
+                        Arquivos.copyFile(file, conn);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
-        };
-        EventHandler<ActionEvent> importarDiretorio = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e)
-            {
-            	DirectoryChooser directoryChooser = new DirectoryChooser();
-            	directoryChooser.setTitle("Escolha um diretório");
-            	File file = directoryChooser.showDialog(stage);
-            	System.out.println(file.getName());
-                System.out.println("fon2");
-                MusicaDAO.novoDiretorio(file, conn);
+        });
+
+        botaoImportarDiretorio.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // Abre o DirectoryChooser para selecionar um diretório
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle("Escolha um diretório");
+                File file = directoryChooser.showDialog(stage);
+
+                // Verifica se o usuário selecionou um diretório
+                if (file != null) {
+                    // Adiciona o diretório ao banco de dados
+                    MusicaDAO.novoDiretorio(file, conn);
+                }
             }
+        }); 
+        
         };
-        botaoImportarMusica.setOnAction(importarMusica);
-        botaoImportarDiretorio.setOnAction(importarDiretorio);
-    }
-
-
 	
+    /**
+     * Inicializa o controlador da tela de menu.
+     * @throws SQLException Exceção relacionada ao banco de dados.
+     */
+    public void initialize() throws SQLException {
+
+        System.out.println("Inicializou");
+
+        // Armazena o timeSlider e o label da música tocando na instância do UserHolder
+        holder.setTimeSlider(timeSlider);
+        holder.setMusicaTocando(musicaTocando);
+
+        // Preenche os labels de nome, usuário e tipo com as informações do usuário logado
+        nameHolder.setText(loggedUser.getNome());
+        usernameHolder.setText(loggedUser.getUsuario());
+        typeHolder.setText(loggedUser.getTipo());
+
+        // Configura o menu de importação de arquivos e diretórios
+        configMenuButton(conn);
+
+        // Carrega as playlists do usuário logado
+        loadPlaylists(loggedUser.getId(), conn);
+
+        // Adiciona um listener ao item selecionado da lista de playlists
+        ListaPlaylists.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                loadMusicas(conn);
+            }
+        });
+
+        // Define o volume inicial do player
+        volumeSlider.setValue(50);
+        holder.setVolume(volumeSlider.getValue());
+
+        // Adiciona um listener ao slider de volume
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable arg0) {
+                if (MusicPlayer.getCurrentPlayer() != null) {
+                    MusicPlayer.getCurrentPlayer().setVolume(volumeSlider.getValue() / 100);
+                    holder.setVolume(volumeSlider.getValue());
+                }
+            }
+        });
+
+        // Adiciona um listener ao slider de tempo
+        timeSlider.valueProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable arg0) {
+                if (MusicPlayer.getCurrentPlayer() != null) {
+                    double tempoTotal = MusicPlayer.getCurrentPlayer().getStopTime().toSeconds();
+                    double jump = 100000 / tempoTotal;
+                    if (Math.round((timeSlider.getValue() / jump)) != Math.round(MusicPlayer.getCurrentPlayer().getCurrentTime().toSeconds())) {
+                        System.out.println("foi movido");
+                        Duration seek = new Duration((timeSlider.getValue() / jump) * 1000);
+                        MusicPlayer.getCurrentPlayer().seek(seek);
+                        MusicPlayer.setPauseTime(seek);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Realiza o logout do usuário e retorna à tela de login.
+     * @param event O evento de clique do botão de logout.
+     * @throws Exception Exceção genérica.
+     */
+    @FXML
+    public void logOut(ActionEvent event) throws Exception {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Limpa a fila e para o player
+        MusicPlayer.limparFila();
+        player.proximaMusica();
+        MusicPlayer.getCurrentPlayer().stop();
+        MusicPlayer.setIsPlaying(0);
+
+        // Reinicia o player com um arquivo vazio
+        player.setCurrentPlayer(new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString())));
+
+        // Abre a tela de login
+        LoginView login = new LoginView();
+        conn.close();
+        login.start(stage);
+    }
 	
-	public void initialize() throws SQLException {
-		
-		System.out.println("Inicializou");
-		holder.setTimeSlider(timeSlider);
-		holder.setMusicaTocando(musicaTocando);
-		nameHolder.setText(loggedUser.getNome());
-		usernameHolder.setText(loggedUser.getUsuario());
-		typeHolder.setText(loggedUser.getTipo());
-		
-		
-		configMenuButton(conn);
-		loadPlaylists(loggedUser.getId(),conn);
-		ListaPlaylists.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>(){
-			 @Override
-			    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {			        
-				 loadMusicas(conn);
-			    }
-		});
-		volumeSlider.setValue(50);
-		holder.setVolume(volumeSlider.getValue());
-		volumeSlider.valueProperty().addListener(new InvalidationListener(){
-			@Override
-			public void invalidated(Observable arg0) {
-				// TODO Auto-generated method stub
-				if(MusicPlayer.getCurrentPlayer()!=null) {
-					MusicPlayer.getCurrentPlayer().setVolume(volumeSlider.getValue()/100);
-					holder.setVolume(volumeSlider.getValue());
-				}	
-			}
-		});
-		timeSlider.valueProperty().addListener(new InvalidationListener(){
-			@Override
-			public void invalidated(Observable arg0) {
-				if(MusicPlayer.getCurrentPlayer()!=null) {
-					double tempoTotal = MusicPlayer.getCurrentPlayer().getStopTime().toSeconds();
-					double jump = 100000/tempoTotal;
-					if(Math.round((timeSlider.getValue()/jump))!=Math.round(MusicPlayer.getCurrentPlayer().getCurrentTime().toSeconds())) {
-						System.out.println("foi movido");
-						Duration seek = new Duration((timeSlider.getValue()/jump) * 1000 );
-						MusicPlayer.getCurrentPlayer().seek(seek);
-						MusicPlayer.setPauseTime(seek);
-					}	
-				}	
-			}
-		});
-	}
+    /**
+     * Carrega as playlists do usuário logado.
+     * @param userId ID do usuário logado.
+     * @param conn Conexão com o banco de dados.
+     */
+    public void loadPlaylists(int userId, Connection conn) {
+        String sql = "SELECT playlists.nome FROM playlists WHERE proprietario_id = ?";
+
+        // Limpa a lista de playlists
+        ListaPlaylists.getItems().clear();
+
+        // Adiciona a playlist "Musicas" à lista
+        ListaPlaylists.getItems().add("Musicas");
+
+        // Verifica se o usuário logado é VIP
+        if (loggedUser.getTipo().equals("VIP")) {
+            try {
+                // Prepara a consulta SQL
+                PreparedStatement stmt = conn.prepareStatement(sql);
+
+                // Define o parâmetro da consulta
+                stmt.setInt(1, userId);
+
+                // Executa a consulta SQL
+                ResultSet rs = stmt.executeQuery();
+
+                // Adiciona as playlists do usuário à lista
+                while (rs.next()) {
+                    ListaPlaylists.getItems().add(rs.getString("nome"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
-	@FXML
-	public void logOut(ActionEvent event) throws Exception {
-		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		MusicPlayer.limparFila();
-		player.proximaMusica();
-		MusicPlayer.getCurrentPlayer().stop();
-		MusicPlayer.setIsPlaying(0);
-		player.setCurrentPlayer(new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString())));
-		LoginView login = new LoginView();
-		conn.close();
-		login.start(stage);
-	}
-	
-	public void loadPlaylists(int userId,Connection conn) {
-		//System.out.println("NUMERO UM");
-		String sql = "SELECT playlists.nome FROM playlists WHERE proprietario_id = ?";
-		ListaPlaylists.getItems().clear();
-		ListaPlaylists.getItems().add("Musicas");
-		if(loggedUser.getTipo().equals("VIP")) {
-			System.out.println("É um vip, procurando playlists");
-			try {
-			PreparedStatement stmt = conn.prepareStatement(sql); 
-			stmt.setInt(1, userId);
-			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				ListaPlaylists.getItems().add(rs.getString("nome"));
-				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
+    /**
+     * Carrega as músicas da playlist selecionada.
+     * @param conn Conexão com o banco de dados.
+     */
+    public void loadMusicas(Connection conn) {
+        String sql = "SELECT m.titulo AS musica\n"
+                + "FROM musicas AS m\n"
+                + "JOIN musicas_e_playlists AS mep ON m.id = mep.id_musica\n"
+                + "JOIN playlists AS p ON mep.id_playlist = p.id\n"
+                + "WHERE p.nome = ? AND p.proprietario_id = ?";
 
-	}
-	
-	public void loadMusicas(Connection conn) {
-		String sql = "SELECT m.titulo AS musica\r\n"
-				+ "FROM musicas AS m\r\n"
-				+ "JOIN musicas_e_playlists AS mep ON m.id = mep.id_musica\r\n"
-				+ "JOIN playlists AS p ON mep.id_playlist = p.id\r\n"
-				+ "WHERE p.nome = ? AND p.proprietario_id = ?";
-		
-		
-		String nomePlaylist = ListaPlaylists.getSelectionModel().getSelectedItem();
-		int id = loggedUser.getId();
-		if(nomePlaylist==null) {
-			return;
-		}
-		if(nomePlaylist.equals("Musicas"))
-			id=0;
-		
-		PreparedStatement stmt;
-		listaMusicas.getItems().clear();
-		try {
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1,ListaPlaylists.getSelectionModel().getSelectedItem());
-			stmt.setInt(2, id);
-			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {	
-				System.out.println(rs.getString("musica"));
-				listaMusicas.getItems().add(rs.getString("musica"));	
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-	}
+        // Recupera a playlist selecionada e o ID do usuário logado
+        String nomePlaylist = ListaPlaylists.getSelectionModel().getSelectedItem();
+        int id = loggedUser.getId();
 
+        if (nomePlaylist == null) {
+            return;
+        }
+
+        // Se a playlist selecionada for "Musicas", utiliza o ID 0
+        if (nomePlaylist.equals("Musicas")) {
+            id = 0;
+        }
+
+        // Limpa a lista de músicas
+        listaMusicas.getItems().clear();
+
+        try {
+            // Prepara a consulta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            // Define os parâmetros da consulta
+            stmt.setString(1, nomePlaylist);
+            stmt.setInt(2, id);
+
+            // Executa a consulta SQL
+            ResultSet rs = stmt.executeQuery();
+
+            // Adiciona as músicas da playlist à lista
+            while (rs.next()) {
+                System.out.println(rs.getString("musica"));
+                listaMusicas.getItems().add(rs.getString("musica"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Inicia a reprodução da música.
+     * @param event Evento de clique do botão "Play".
+     */
     @FXML
-    void playAction(ActionEvent event) {
-    	
-    	player.tocar();
-    	
+    public void playAction(ActionEvent event) {
+        player.tocar();
     }
-	@FXML
-    void previousAction(ActionEvent event) {
-		player.musicaAnterior();
-    }
+    
+    /**
+     * Volta para a música anterior.
+     * @param event Evento de clique do botão "Anterior".
+     */
     @FXML
-    void pauseAction(ActionEvent event) {
-    	
-    	player.pausar();
+    public void previousAction(ActionEvent event) {
+        player.musicaAnterior();
     }
-
+    
+    /**
+     * Pausa a reprodução da música.
+     * @param event Evento de clique do botão "Pause".
+     */
     @FXML
-    void nextAction(ActionEvent event) {
-    	player.proximaMusica();
+    public void pauseAction(ActionEvent event) {
+        player.pausar();
     }
 
+    /**
+     * Avança para a próxima música.
+     * @param event Evento de clique do botão "Próximo".
+     */
     @FXML
-    void criarPlaylist(ActionEvent event) {
-    	String nomeNovaPlaylist = novaPlaylistField.getText();
-    	if(!loggedUser.getTipo().equals("VIP")) {
-    		errorHolder.setTextFill(Color.color(1, 0, 0));
-    		errorHolder.setText("Apenas VIPs podem criar playlists.");
-    		return;
-    	}
-    	if(nomeNovaPlaylist.equals("Musicas")) {
-    		errorHolder.setTextFill(Color.color(1, 0, 0));
-    		errorHolder.setText("Não é possível criar uma playlist com este nome");
-    		return;
-    	}
-    	int busca = PlaylistDAO.getPlaylistId(nomeNovaPlaylist, loggedUser.getId(), conn);
-    	if(busca ==-1) {
-    		PlaylistDAO.novaPlaylist(nomeNovaPlaylist, loggedUser.getId(), conn);
-    		errorHolder.setTextFill(Color.color(0, 1, 0));
-    		errorHolder.setText("Nova playlist criada com sucesso!");	
-    		return;
-    	}
-    	errorHolder.setTextFill(Color.color(1, 0, 0));
-		errorHolder.setText("Não é possível criar uma playlist");
-    	return;
+    public void nextAction(ActionEvent event) {
+        player.proximaMusica();
     }
 
+    /**
+     * Cria uma nova playlist.
+     * @param event Evento de clique do botão "Criar Playlist".
+     */
     @FXML
-    void removerPlaylist(ActionEvent event) {
-    	String nomeRemoverPlaylist = removerPlaylistField.getText();
-    	if(nomeRemoverPlaylist.equals("Musicas")) {
-    		errorHolder.setTextFill(Color.color(1, 0, 0));
-    		errorHolder.setText("Não é possível remover esta playlist");
-    		return;
-    	}
-    	int busca = PlaylistDAO.getPlaylistId(nomeRemoverPlaylist, loggedUser.getId(), conn);
-    	if(busca >=0) {
-    		
-    		PlaylistDAO.removerPlaylist(nomeRemoverPlaylist, loggedUser.getId(), conn);
-    		
-    		errorHolder.setTextFill(Color.color(0, 1, 0));
-    		errorHolder.setText("Playlist removida com sucesso!");	
-    		return;
-    	}
+    public void criarPlaylist(ActionEvent event) {
+        String nomeNovaPlaylist = novaPlaylistField.getText();
+
+        // Verifica se o usuário é VIP
+        if (!loggedUser.getTipo().equals("VIP")) {
+            errorHolder.setTextFill(Color.color(1, 0, 0));
+            errorHolder.setText("Apenas VIPs podem criar playlists.");
+            return;
+        }
+
+        // Verifica se o nome da playlist é inválido
+        if (nomeNovaPlaylist.equals("Musicas")) {
+            errorHolder.setTextFill(Color.color(1, 0, 0));
+            errorHolder.setText("Não é possível criar uma playlist com este nome");
+            return;
+        }
+
+        // Verifica se a playlist já existe
+        int busca = PlaylistDAO.getPlaylistId(nomeNovaPlaylist, loggedUser.getId(), conn);
+        if (busca == -1) {
+            // Cria a nova playlist
+            PlaylistDAO.novaPlaylist(nomeNovaPlaylist, loggedUser.getId(), conn);
+
+            // Exibe mensagem de sucesso
+            errorHolder.setTextFill(Color.color(0, 1, 0));
+            errorHolder.setText("Nova playlist criada com sucesso!");
+            return;
+        }
+
+        // Exibe mensagem de erro
+        errorHolder.setTextFill(Color.color(1, 0, 0));
+        errorHolder.setText("Não é possível criar uma playlist");
     }
 
+    /**
+     * Remove uma playlist existente.
+     * @param event Evento de clique do botão "Remover Playlist".
+     */
     @FXML
-    void importarArquivo(ActionEvent event) {
-		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    public void removerPlaylist(ActionEvent event) {
+        String nomeRemoverPlaylist = removerPlaylistField.getText();
 
-    	FileChooser fileChooser = new FileChooser();
-    	fileChooser.setTitle("Open Resource File");
-    	File file = fileChooser.showOpenDialog(stage);
-    	System.out.println(file.getName());
+        // Verifica se o nome da playlist é inválido
+        if (nomeRemoverPlaylist.equals("Musicas")) {
+            errorHolder.setTextFill(Color.color(1, 0, 0));
+            errorHolder.setText("Não é possível remover esta playlist");
+            return;
+        }
+
+        // Verifica se a playlist existe
+        int busca = PlaylistDAO.getPlaylistId(nomeRemoverPlaylist, loggedUser.getId(), conn);
+        if (busca >= 0) {
+            // Remove a playlist
+            PlaylistDAO.removerPlaylist(nomeRemoverPlaylist, loggedUser.getId(), conn);
+
+            // Exibe mensagem de sucesso
+            errorHolder.setTextFill(Color.color(0, 1, 0));
+            errorHolder.setText("Playlist removida com sucesso!");
+            return;
+        }
+
+        // Exibe mensagem de erro
+        errorHolder.setTextFill(Color.color(1, 0, 0));
+        errorHolder.setText("Playlist não encontrada");
     }
 
+    /**
+     * Abre um FileChooser para escolher um arquivo de música.
+     * @param event Evento de clique do botão "Importar Música".
+     */
+    /*@FXML
+    public void importarArquivo(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            System.out.println(file.getName());
+        }
+    }*/
+
+    /**
+     * Adiciona a música selecionada à playlist especificada.
+     * @param event Evento de clique do botão "Adicionar à Playlist".
+     */
     @FXML
     void adicionarParaPlaylist(ActionEvent event) {
     	String nomePlaylist=addToPlaylistField.getText();
@@ -341,6 +461,10 @@ public class MenuController {
     	}
     }
 
+    /**
+     * Remove a música selecionada da playlist selecionada.
+     * @param event Evento de clique do botão "Remover da Playlist".
+     */
     @FXML
     void removerDaPlaylist(ActionEvent event) {
     	String nomePlaylist=ListaPlaylists.getSelectionModel().getSelectedItem();
@@ -361,7 +485,10 @@ public class MenuController {
     	}
     }
 
-    
+    /**
+     * Adiciona a música selecionada à fila de reprodução.
+     * @param event Evento de clique do botão "Adicionar à Fila".
+     */
     @FXML
     void adicionarMusicaFila(ActionEvent event) {
     	String nome = listaMusicas.getSelectionModel().getSelectedItem();
@@ -369,7 +496,11 @@ public class MenuController {
     	MusicPlayer.getFila().add(musica);
     	
     }
-
+    
+    /**
+     * Adiciona as músicas de uma playlist à fila de reprodução.
+     * @param event Evento de clique do botão "Adicionar Playlist à Fila".
+     */
     @FXML
     void adicionarPlaylistFila(ActionEvent event) {
     	String playlist = ListaPlaylists.getSelectionModel().getSelectedItem();
@@ -386,12 +517,20 @@ public class MenuController {
 			e.printStackTrace();
 		}
     }
-
+    
+    /**
+     * Limpa a fila de reprodução.
+     * @param event Evento de clique do botão "Limpar Fila".
+     */
     @FXML
     void limparFila(ActionEvent event) {
     	MusicPlayer.limparFila();
     }
-	
+    
+    /**
+     * Atualiza a lista de playlists e a lista de músicas.
+     * @param event Evento de clique do botão "Refresh".
+     */
     @FXML
     void refresh(ActionEvent event) {
         loadMusicas(conn);

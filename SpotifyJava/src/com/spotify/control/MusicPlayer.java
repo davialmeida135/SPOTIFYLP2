@@ -1,5 +1,6 @@
 package com.spotify.control;
 import java.io.File;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,8 +8,6 @@ import java.util.Stack;
 
 import com.spotify.model.Musica;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.media.Media;
@@ -26,6 +25,16 @@ public class MusicPlayer extends Application {
 	
 	private static int isPlaying=0;
 	
+	private static Duration pauseTime = Duration.ZERO;
+	
+	private static UserHolder holder = UserHolder.getInstance();
+	
+	private static MediaPlayer currentPlayer =new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString()));
+	
+	/**
+	 * Importa instância do player de música
+	 */
+	private final static MusicPlayer INSTANCE = new MusicPlayer();
 	public static int getIsPlaying() {
 		return isPlaying;
 	}
@@ -34,9 +43,6 @@ public class MusicPlayer extends Application {
 		MusicPlayer.isPlaying = isPlaying;
 	}
 
-	private static Duration pauseTime = Duration.ZERO;
-	
-	private static UserHolder holder = UserHolder.getInstance();
 	
 	public static Duration getPauseTime() {
 		return pauseTime;
@@ -46,17 +52,97 @@ public class MusicPlayer extends Application {
 		MusicPlayer.pauseTime = pauseTime;
 	}
 
-	private static MediaPlayer currentPlayer =new MediaPlayer(new Media(new File("./storage/Arquivo.mp3").toURI().toString()));
+
+	/**
+	 * Retorna a instância única da classe.
+	 *
+	 * @return Instância do MusicPlayer.
+	 */
+	public static MusicPlayer getInstance() {
+		return INSTANCE;
+	}
 	
+	/**
+	 * Retorna a fila de músicas.
+	 *
+	 * @return Fila de músicas.
+	 */
+	public static Deque<Musica> getFila() {
+		return fila;
+	}
+
+	/**
+	 * Define a fila de músicas.
+	 *
+	 * @param fila Nova fila de músicas.
+	 */
+	public static void  setFila(Deque<Musica> fila) {
+		MusicPlayer.fila = fila;
+	}
 	
-	private final static MusicPlayer INSTANCE = new MusicPlayer();
+	/**
+	 * Limpa a fila de músicas, mantendo apenas a primeira música.
+	 */
+	public static void limparFila() {
+		Musica first = fila.element();
+		fila.clear();
+		fila.add(first);
+		
+	}
 	
+	/**
+	 * Listener para atualizar a barra de progresso de acordo com o tempo de reprodução da música.
+	 */
+	public static ChangeListener<Duration> changeListener = new ChangeListener<Duration>() {
+		@Override
+		public void changed(ObservableValue<? extends Duration> arg0, Duration arg1, Duration arg2) {
+			double tempoTotal = currentPlayer.getStopTime().toSeconds();
+			double jump = 100000/tempoTotal;
+			holder.getTimeSlider().setValue(currentPlayer.getCurrentTime().toSeconds()*jump);
+			
+		}
+	};
+	
+	/**
+	 * Define o player de mídia atual e configura o listener para atualização da barra de progresso.
+	 *
+	 * @param player Novo player de mídia.
+	 */
+	public void setCurrentPlayer(MediaPlayer player) {
+	    if (currentPlayer != null) {
+	    	currentPlayer.currentTimeProperty().removeListener(changeListener);
+	    }
+	    currentPlayer = player;
+	    if (currentPlayer != null) {
+	    	currentPlayer.currentTimeProperty().addListener(changeListener);
+	    }
+	}
+	
+	/**
+	 * Retorna o player de mídia atual.
+	 *
+	 * @return Player de mídia atual.
+	 */
+	public static MediaPlayer getCurrentPlayer() {
+			return currentPlayer;
+		}
+	
+	/**
+	 * Inicia a reprodução da música seguinte na fila.
+	 *
+	 * @return void
+	 */
 	public void tocar() {
 		
 		playNextMusicFile(fila);
 
 	}
 	
+	/**
+	 * Pausa a reprodução da música atual.
+	 *
+	 * @return void
+	 */
 	public void pausar() {
 		 if (currentPlayer != null && isPlaying ==1) {
 		    pauseTime = currentPlayer.getCurrentTime();
@@ -66,6 +152,11 @@ public class MusicPlayer extends Application {
 		 } 
 	}
 	
+	/**
+	 * Avança para a próxima música na fila.
+	 *
+	 * @return void
+	 */
 	public void proximaMusica() {
 		if(!fila.isEmpty()) {
 			jaTocadas.add(fila.remove());
@@ -76,6 +167,11 @@ public class MusicPlayer extends Application {
     	
 	}
 	
+	/**
+	 * Volta para a música anterior.
+	 *
+	 * @return void
+	 */
 	public void musicaAnterior() {
 		if(!jaTocadas.isEmpty()) {
 			fila.addFirst(jaTocadas.pop());
@@ -86,7 +182,13 @@ public class MusicPlayer extends Application {
 		return;
 	}
 	
-	public void playNextMusicFile(Queue<Musica> fila) {
+	/**
+	 * Método interno que toca a próxima música na fila.
+	 *
+	 * @param fila Fila de músicas.
+	 * @return void
+	 */
+	private void playNextMusicFile(Queue<Musica> fila) {
 		  if (fila.isEmpty()) {
 			  return ;
 		  }
@@ -125,43 +227,4 @@ public class MusicPlayer extends Application {
    	
 	}
 
-	public static MusicPlayer getInstance() {
-		return INSTANCE;
-	}
-
-	public static Deque<Musica> getFila() {
-		return fila;
-	}
-
-	public static void  setFila(Deque<Musica> fila) {
-		MusicPlayer.fila = fila;
-	}
-	
-	public static void limparFila() {
-		Musica first = fila.element();
-		fila.clear();
-		fila.add(first);
-		
-	}
-	public static ChangeListener<Duration> changeListener = new ChangeListener<Duration>() {
-		@Override
-		public void changed(ObservableValue<? extends Duration> arg0, Duration arg1, Duration arg2) {
-			double tempoTotal = currentPlayer.getStopTime().toSeconds();
-			double jump = 100000/tempoTotal;
-			holder.getTimeSlider().setValue(currentPlayer.getCurrentTime().toSeconds()*jump);
-			
-		}
-	};
-	public void setCurrentPlayer(MediaPlayer player) {
-	    if (currentPlayer != null) {
-	    	currentPlayer.currentTimeProperty().removeListener(changeListener);
-	    }
-	    currentPlayer = player;
-	    if (currentPlayer != null) {
-	    	currentPlayer.currentTimeProperty().addListener(changeListener);
-	    }
-	}
-	public static MediaPlayer getCurrentPlayer() {
-			return currentPlayer;
-		}
 }

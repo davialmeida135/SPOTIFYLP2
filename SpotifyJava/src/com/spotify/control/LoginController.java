@@ -22,7 +22,9 @@ import com.spotify.data.*;
 import com.spotify.model.Usuario;
 import com.spotify.dao.UsuarioDAO;
 
-
+/**
+ * Esta classe controla a tela de login do aplicativo.
+ */
 public class LoginController {
 	
 	private Stage stage;
@@ -53,7 +55,11 @@ public class LoginController {
 	String senha;
 	
 	int autenticador;
-	
+	/**
+	 * Método chamado ao clicar no botão de login.
+	 * @param event O evento de click do botão.
+	 * @throws Exception Exceção genérica.
+	 */
 	public void submitLogin(ActionEvent event) throws Exception { //Ao ser apertado o botão login
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		user = new Usuario();
@@ -98,6 +104,9 @@ public class LoginController {
 		}
 	}
 	
+	/**
+	 * Redireciona para a tela de registro.
+	 */
 	public void registerRedirect() {
 		stage = (Stage) registerLabel.getScene().getWindow();
 		RegistrarView registro = new RegistrarView();
@@ -106,9 +115,7 @@ public class LoginController {
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
-		}
-		System.out.println("oii");
-		
+		}	
 		
 	}
 
