@@ -215,9 +215,12 @@ public class MenuController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Limpa a fila e para o player
-        MusicPlayer.limparFila();
-        player.proximaMusica();
-        MusicPlayer.getCurrentPlayer().stop();
+        if(!MusicPlayer.getFila().isEmpty()) {
+        	MusicPlayer.limparFila();
+        	player.proximaMusica();
+        	MusicPlayer.getCurrentPlayer().stop();
+        }
+ 
         MusicPlayer.setIsPlaying(0);
 
         // Reinicia o player com um arquivo vazio
