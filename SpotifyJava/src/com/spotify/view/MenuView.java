@@ -8,9 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import com.spotify.control.MenuController;
-
+/**
+ * Classe que carrega o Menu.fxml
+ * */
 public class MenuView extends Application{
-	private Parent root;
+	
 	public Scene generateScene() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("templates/MainMenu.fxml"));
         Scene scene = new Scene(loader.load());

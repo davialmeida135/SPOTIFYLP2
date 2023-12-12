@@ -7,8 +7,10 @@ import com.spotify.dao.PlaylistDAO;
 import com.spotify.data.*;
 
 
-//No momento apenas testes da database
-//Em breve testes da interface
+/**
+ * Classe Main.
+ * Inicializa o programa com os métodos
+ * inicializarDiretorios e play_login*/
 
 public class Main {
 	public static void main(String[] args) throws SQLException {

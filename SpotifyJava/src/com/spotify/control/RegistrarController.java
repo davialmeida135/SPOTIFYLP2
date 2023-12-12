@@ -1,6 +1,7 @@
 package com.spotify.control;
 
-import java.io.IOException;
+
+
 import java.sql.Connection;
 
 import javafx.event.ActionEvent;
@@ -8,16 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+
+
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
+
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.spotify.view.*;
 import com.spotify.data.*;
@@ -28,7 +27,7 @@ import com.spotify.dao.UsuarioDAO;
 public class RegistrarController {
 	
 	private Stage stage;
-	private Scene scene;
+
 	private Usuario user;
 
 	@FXML
@@ -58,7 +57,14 @@ public class RegistrarController {
 	Connection conn = DataBase.connect("database.db");
 
 	int autenticador;
-	
+	/**
+
+	Este método é chamado quando o usuário clica no botão Registrar. Ele recupera as informações do usuário dos campos do formulário e tenta registrar um novo usuário no banco de dados.
+
+	@param event O evento associado ao clique do botão.
+
+	@throws Exception Em caso de qualquer erro durante o registro.
+	*/
 	public void submitRegistro(ActionEvent event) throws Exception { //Ao ser apertado o botão login
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		user = new Usuario();
@@ -105,7 +111,11 @@ public class RegistrarController {
 		}
 	}
 
-	
+	/**
+
+	Este método é chamado quando o usuário clica no link "Log In". 
+	Ele fecha a cena atual e exibe a cena de login.
+	*/
 	public void logInRedirect() {
 		stage = (Stage) myLabel.getScene().getWindow();
 		LoginView login = new LoginView();
@@ -118,11 +128,20 @@ public class RegistrarController {
 		}
 		
 	}
-
+	/**
+	 * Retorna o objeto usuário atualmente associado ao controller.
+	 *
+	 * @return Objeto usuário.
+	 */
 	public Usuario getUser() {
 		return user;
 	}
-
+	
+	/**
+	 * Define o objeto usuário associado ao controller.
+	 *
+	 * @param user Objeto usuário.
+	 */
 	public void setUser(Usuario user) {
 		this.user = user;
 	}

@@ -5,7 +5,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.application.Application;
 
-
+/**
+ * Classe que carrega o Registrar.fxml
+ * */
 public class RegistrarView extends Application{
 	public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("./templates/Registrar.fxml"));
