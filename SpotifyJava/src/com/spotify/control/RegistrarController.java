@@ -95,7 +95,7 @@ public class RegistrarController {
 			}
 			// Insere o usuário no banco de dados
 			UsuarioDAO.novoUsuario(nome, usuario, senha, tipo, conn);
-			
+			errorLabel.setText(" ");
 
 			// Mostra uma mensagem de sucesso
 			myLabel.setText("Você está cadastrado!");
