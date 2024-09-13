@@ -7,10 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 import com.spotify.data.Arquivos;
-import com.spotify.data.DataBase;
+
 import com.spotify.model.Musica;
 
 //Classe que utilizará os métodos fornecidos pela classe Database
